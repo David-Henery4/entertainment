@@ -1,12 +1,11 @@
 import "./styles/index.scss";
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import {Navbar} from "./components";
 
 function App() {
   return (
-    <div className="App">
-      <div className="container">
-      <h1 className="text-9xl container__main">HELLO</h1>
-      <div></div>
-      </div>
+    <div className="App font-outfit font-light min-h-screen bg-darkBlue">
+      <Navbar/>
     </div>
   );
 }

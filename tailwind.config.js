@@ -10,6 +10,9 @@ module.exports = {
       greyishBlue: "#5A698F",
       semiDarkBlue: "#161D2F",
     },
+    fontFamily: {
+      outfit: ["Outfit", "sans-serif"],
+    },
     extend: {
       fontSize: {
         bodySml: "13px",
