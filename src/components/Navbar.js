@@ -4,7 +4,7 @@ import { LogoIcon, profileImg } from '../assets'
 
 const Navbar = () => {
   return (
-    <nav className='bg-semiDarkBlue flex w-full p-4 justify-between items-center'>
+    <nav className='col-start-1 col-end-13 bg-semiDarkBlue flex w-full p-4 justify-between items-center'>
       <div>
         <LogoIcon/>
       </div>
