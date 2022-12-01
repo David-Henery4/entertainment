@@ -15,7 +15,7 @@ const ContentItem = () => {
       </div>
       {/* TEXT INFO */}
       <div className="z-10 relative flex flex-col justify-center items-start">
-        <div className="flex justify-center items-center gap-2 text-xs text-white/75">
+        <div className="flex justify-center items-center gap-2 text-xs smTab:text-bodySml text-white/75">
           <p>2019</p>
           <div className="w-[3px] h-[3px] bg-white/50 rounded-full"></div>
           <div className="flex justify-center items-center gap-2">
@@ -26,7 +26,7 @@ const ContentItem = () => {
           <p>PG</p>
         </div>
         <div>
-          <p className="text-bodyM">Beyond Earth</p>
+          <p className="text-bodyM smTab:text-lg">Beyond Earth</p>
         </div>
       </div>
     </div>

@@ -18,6 +18,9 @@ module.exports = {
       width: {
         trendingThumbTab: "470px",
       },
+      gap: {
+        19: "75px",
+      },
       gridColumnEnd: {
         lrgMainGridBeforeEnd: "14",
         lrgMainGridEnd: "15",
