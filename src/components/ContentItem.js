@@ -3,14 +3,15 @@ import { greatLandsThumbSml, bookmarkIcon, movieIcon } from "../assets";
 
 const ContentItem = () => {
   return (
-    <div className="grid gap-2">
+    <div className="grid gap-2 w-full">
       {/* IMAGE & BOOKMARK ICON */}
-      <div className="relative w-[164px]">
+      <div className="relative w-full">
         {/* temp w&h for img */}
         <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50">
           <img src={bookmarkIcon} alt="bookmark-icon" />
         </div>
-        <img className="h-[110px] rounded-lg" src={greatLandsThumbSml} alt="thumbnail" />
+        {/* h-[110px] */}
+        <img className="w-full rounded-lg" src={greatLandsThumbSml} alt="thumbnail" />
       </div>
       {/* TEXT INFO */}
       <div className="z-10 relative flex flex-col justify-center items-start">

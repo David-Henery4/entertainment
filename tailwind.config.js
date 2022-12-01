@@ -15,14 +15,39 @@ module.exports = {
       outfit: ["Outfit", "sans-serif"],
     },
     extend: {
+      width: {
+        trendingThumbTab: "470px",
+      },
+      gridColumnEnd: {
+        lrgMainGridBeforeEnd: "14",
+        lrgMainGridEnd: "15",
+      },
+      height: {
+        trendingThumbTab: "230px",
+      },
+      screens: {
+        smTab: "730px",
+      },
       fontSize: {
         bodySml: "13px",
         bodyM: "15px",
+        subheadingTab: "32px",
       },
       gridTemplateColumns: {
-        contentRespon: "repeat(auto-fit, minmax(100px, 1fr))",
+        contentRespon: "repeat(auto-fit, minmax(163px, 1fr))",
+        contentResponTab: "repeat(auto-fit, minmax(185px, 1fr))",
+        contentResponDesk: "repeat(auto-fit, minmax(220px, 1fr))",
         mobBleed: "16px repeat(10, 1fr) 16px",
-      }
+        tabBleed: "25px repeat(10, 1fr) 25px",
+        deskBleed: "36px repeat(10, 1fr) 36px",
+        lrgDeskBleed: "32px 1fr 36px repeat(10, 1fr) 36px",
+      },
+      spacing: {
+        contentTabColGap: "30px",
+        contentLapColGap: "40px",
+        contentTabRowGap: "24px",
+        contentLapRowGap: "32px",
+      },
     },
   },
   plugins: [],

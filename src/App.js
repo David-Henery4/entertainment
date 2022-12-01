@@ -6,7 +6,7 @@ import {Home, Bookmarked, Movies, TvSeries} from "./pages";
 function App() {
   return (
     <div className="App font-outfit font-light bg-darkBlue text-white">
-      <main className="w-full min-h-screen grid grid-cols-mobBleed gap-y-6">
+      <main className="pb-14 smTab:pt-6 w-full min-h-screen grid grid-cols-mobBleed gap-y-6 smTab:grid-cols-tabBleed smTab:gap-y-8 lg:grid-cols-deskBleed xl:grid-cols-lrgDeskBleed">
       <Navbar/>
       <SearchInput/>
       <Home/>

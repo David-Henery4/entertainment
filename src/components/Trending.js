@@ -3,16 +3,13 @@ import { beyondEarthTrending, bookmarkIcon, movieIcon } from "../assets";
 
 const Trending = () => {
   return (
-    <section className="col-start-2 col-end-13 grid gap-4 overflow-x-scroll">
-      <h1 className="text-xl font-light ">Trending</h1>
-      <div className="flex justify-center items-center gap-4">
+    <section className="col-start-2 col-end-13 grid gap-4 overflow-x-auto xl:col-start-4 xl:col-end-lrgMainGridEnd">
+      <h1 className="text-xl font-light smTab:text-subheadingTab">Trending</h1>
+      <div className="flex justify-start items-center gap-4 smTab:gap-10">
         {/* TRENDING #1 */}
-        <div className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end">
+        <div className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab">
           <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50">
-            <img
-              src={bookmarkIcon}
-              alt="bookmark-icon"
-            />
+            <img src={bookmarkIcon} alt="bookmark-icon" />
           </div>
           <img
             className="absolute top-0 left-0 -z-0 w-full h-full"
@@ -36,13 +33,9 @@ const Trending = () => {
           </div>
         </div>
         {/* TRENDING #2 */}
-        <div className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end">
+        <div className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab">
           <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50">
-            <img
-              className=""
-              src={bookmarkIcon}
-              alt="bookmark-icon"
-            />
+            <img className="" src={bookmarkIcon} alt="bookmark-icon" />
           </div>
           <img
             className="absolute top-0 left-0 -z-0 w-full h-full"
@@ -66,13 +59,9 @@ const Trending = () => {
           </div>
         </div>
         {/* TRENDING #3 */}
-        <div className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end">
+        <div className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab">
           <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50">
-            <img
-              className=""
-              src={bookmarkIcon}
-              alt="bookmark-icon"
-            />
+            <img className="" src={bookmarkIcon} alt="bookmark-icon" />
           </div>
           <img
             className="absolute top-0 left-0 -z-0 w-full h-full"
