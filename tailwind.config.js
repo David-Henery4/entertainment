@@ -46,6 +46,9 @@ module.exports = {
         deskBleed: "36px repeat(10, 1fr) 36px",
         lrgDeskBleed: "32px 1fr 36px repeat(10, 1fr) 36px",
       },
+      gridTemplateRows: {
+        lrgDeskRows: "auto repeat(2, 1fr)",
+      },
       spacing: {
         contentTabColGap: "30px",
         contentLapColGap: "40px",
