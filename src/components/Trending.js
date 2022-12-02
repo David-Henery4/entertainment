@@ -3,7 +3,7 @@ import { beyondEarthTrending, bookmarkIcon, movieIcon } from "../assets";
 
 const Trending = () => {
   return (
-    <section className="col-start-2 col-end-13 grid gap-4 overflow-x-auto xl:col-start-4 xl:col-end-lrgMainGridEnd">
+    <section className="col-start-2 col-end-13 grid gap-4 smTab:gap-7 overflow-x-auto">
       <h1 className="text-xl font-light smTab:text-subheadingTab">Trending</h1>
       <div className="flex justify-start items-center gap-4 smTab:gap-10">
         {/* TRENDING #1 */}

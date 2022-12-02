@@ -3,7 +3,7 @@ import {ContentItem} from "../components"
 
 const Content = () => {
   return (
-    <section className="col-start-2 col-end-12 grid gap-6 xl:col-start-4 xl:col-end-lrgMainGridBeforeEnd">
+    <section className="col-start-2 col-end-12 grid gap-6 smTab:gap-8">
       <h2 className="text-xl font-light smTab:text-subheadingTab">
         Recommended for you
       </h2>
