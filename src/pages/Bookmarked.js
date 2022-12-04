@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import { Content } from "../components";
 
 const Bookmarked = () => {
   return (
-    <div>Bookmarked</div>
-  )
-}
+    <>
+      <Content name={"Bookmarked Movies"} />
+      <Content name={"Bookmarked TV-Series"} />
+    </>
+  );
+};
 
-export default Bookmarked
+export default Bookmarked;

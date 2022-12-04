@@ -1,9 +1,8 @@
 import React from 'react'
+import { Content } from '../components'
 
 const Movies = () => {
-  return (
-    <div>Movies</div>
-  )
+  return <Content name={"Movies"} />;
 }
 
 export default Movies

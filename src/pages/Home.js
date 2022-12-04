@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <>
       <Trending/>
-      <Content/>
+      <Content name={"Recommended for you"}/>
     </>
   )
 }
