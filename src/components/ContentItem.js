@@ -1,7 +1,18 @@
 import React from "react";
 import { greatLandsThumbSml, bookmarkIcon, movieIcon } from "../assets";
+import basicThumb from "../assets/thumbnails/unresolved-cases/regular/small.jpg"
 
-const ContentItem = () => {
+const ContentItem = ({
+  id,
+  category,
+  isBookmarked,
+  rating,
+  thumbnail,
+  title,
+  year,
+}) => {
+  const { regular } = thumbnail;
+  // console.log(regular.small)
   return (
     <div className="grid gap-2 w-full">
       {/* IMAGE & BOOKMARK ICON */}
@@ -11,22 +22,27 @@ const ContentItem = () => {
           <img src={bookmarkIcon} alt="bookmark-icon" />
         </div>
         {/* h-[110px] */}
-        <img className="w-full rounded-lg" src={greatLandsThumbSml} alt="thumbnail" />
+        <img
+          className="w-full rounded-lg"
+          // src={require(`.${regular.small}`)}
+          src={`${regular.small}`}
+          alt="thumbnail"
+        />
       </div>
       {/* TEXT INFO */}
       <div className="z-10 relative flex flex-col justify-center items-start">
         <div className="flex justify-center items-center gap-2 text-xs smTab:text-bodySml text-white/75">
-          <p>2019</p>
+          <p>{year}</p>
           <div className="w-[3px] h-[3px] bg-white/50 rounded-full"></div>
           <div className="flex justify-center items-center gap-2">
             <img src={movieIcon} alt="movie-icon" />
-            <p>Movie</p>
+            <p>{category}</p>
           </div>
           <div className="w-[3px] h-[3px] bg-white/50 rounded-full"></div>
-          <p>PG</p>
+          <p>{rating}</p>
         </div>
         <div>
-          <p className="text-bodyM smTab:text-lg">Beyond Earth</p>
+          <p className="text-bodyM smTab:text-lg">{title}</p>
         </div>
       </div>
     </div>
