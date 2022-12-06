@@ -2,7 +2,7 @@ import "./styles/index.scss";
 import {  Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Navbar, SearchInput } from "./components";
-import { getContent } from "./features/content/contentSlice";
+import { getContent, getMovies, getTV } from "./features/content/contentSlice";
 import { useEffect } from "react";
 
 function App() {

@@ -1,12 +1,14 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import {Trending, Content} from "../components";
-import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const {allContentData} = useSelector(store => store.content)
+  const { allContentData, trendingContent } = useSelector(
+    (store) => store.content
+  );
   return (
     <>
-      <Trending/>
+      <Trending trendingData={trendingContent}/>
       <Content name={"Recommended for you"} contentData={allContentData}/>
     </>
   )

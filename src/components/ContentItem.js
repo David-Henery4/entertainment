@@ -24,8 +24,7 @@ const ContentItem = ({
         {/* h-[110px] */}
         <img
           className="w-full rounded-lg"
-          // src={require(`.${regular.small}`)}
-          src={`${regular.small}`}
+          src={regular && require(`../assets/thumbnails/${regular.small}`)}
           alt="thumbnail"
         />
       </div>

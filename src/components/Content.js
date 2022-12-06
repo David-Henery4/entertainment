@@ -2,7 +2,7 @@ import React from "react";
 import { ContentItem } from "../components";
 
 const Content = ({name, contentData}) => {
-  console.log(contentData)
+  // console.log(contentData)
   return (
     <section className="col-start-2 col-end-12 grid gap-6 smTab:gap-8">
       <h2 className="text-xl font-light smTab:text-subheadingTab">{name}</h2>
