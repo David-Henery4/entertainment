@@ -53,7 +53,12 @@ export const getTV = createAsyncThunk("content/getTV", async () => {
 const contentSlice = createSlice({
   name: "content",
   initialState,
-  reducers: {},
+  reducers: {
+    bookmarkContent: (state, {payload}) => {
+      const markedItem = state.allContentData.find(item => item.id === payload )
+      state.bookmarkedContent = [...state.bookmarkedContent, markedItem]
+    },
+  },
   extraReducers: (builder) => {
     // GET ALL DATA
     builder.addCase(getContent.fulfilled, (state, {payload}) => {
@@ -98,6 +103,6 @@ const contentSlice = createSlice({
 });
 
 // FOR WHEN WE HAVE ACTIONS
-export const {} = contentSlice.actions
+export const {bookmarkContent} = contentSlice.actions
 
 export default contentSlice.reducer;

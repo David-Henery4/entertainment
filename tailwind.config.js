@@ -38,9 +38,9 @@ module.exports = {
         subheadingTab: "32px",
       },
       gridTemplateColumns: {
-        contentRespon: "repeat(auto-fit, minmax(153px, 1fr))",
-        contentResponTab: "repeat(auto-fit, minmax(185px, 1fr))",
-        contentResponDesk: "repeat(auto-fit, minmax(220px, 1fr))",
+        contentRespon: "repeat(auto-fill, minmax(153px, 1fr))",
+        contentResponTab: "repeat(auto-fill, minmax(185px, 1fr))",
+        contentResponDesk: "repeat(auto-fill, minmax(220px, 1fr))",
         mobBleed: "16px repeat(10, 1fr) 16px",
         tabBleed: "25px repeat(10, 1fr) 25px",
         deskBleed: "36px repeat(10, 1fr) 36px",
