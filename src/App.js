@@ -6,9 +6,13 @@ import { getContent, getMovies, getTV } from "./features/content/contentSlice";
 import { useEffect } from "react";
 
 function App() {
+  const dispatch = useDispatch()
   const { bookmarkedContent } = useSelector((store) => store.content);
   const location = useLocation()
   const anyBookmarks = bookmarkedContent.length
+    useEffect(() => {
+      dispatch(getContent());
+    }, []);
   return (
     <div className="App font-outfit font-light bg-darkBlue text-white">
       <main className="content-start items-baseline pb-14 smTab:pt-6 w-full min-h-screen grid grid-cols-mobBleed gap-y-6 smTab:grid-cols-tabBleed smTab:gap-y-8 lg:grid-cols-deskBleed xl:grid-cols-lrgDeskBleed xl:grid-rows-lrgDeskRows" style={{

@@ -7,6 +7,7 @@ import profileImg from "./image-avatar.png"
 import searchIcon from "./icon-search.svg"
 import beyondEarthTrending from "./thumbnails/beyond-earth/trending/small.jpg"
 import bookmarkIcon from "./icon-bookmark-empty.svg"
+import bookmarkIconFull from "./icon-bookmark-full.svg"
 import movieIcon from "./icon-category-movie.svg"
 import greatLandsThumbSml from "./thumbnails/the-great-lands/regular/small.jpg"
 //
@@ -21,6 +22,7 @@ export {
   searchIcon,
   beyondEarthTrending,
   bookmarkIcon,
+  bookmarkIconFull,
   movieIcon,
   greatLandsThumbSml,
 }

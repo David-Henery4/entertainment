@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Content } from "../components";
 
@@ -11,19 +11,42 @@ import { Content } from "../components";
 
 const Bookmarked = () => {
   const { bookmarkedContent } = useSelector((store) => store.content);
-
+  const [bookmarkedMovies, setBookmarkedMovies] = useState([]);
+  const [bookmarkedTVSeries, setBookmarkedTVSeries] = useState([]);
+  //
+  const sortCategories = () => {
+    if (bookmarkedContent.length >= 1) {
+      setBookmarkedMovies(
+        bookmarkedContent.filter((marked) => marked.category === "Movie")
+      );
+      setBookmarkedTVSeries(
+        bookmarkedContent.filter((marked) => marked.category === "TV Series")
+      );
+    }
+  };
+  //
+  useEffect(() => {
+    sortCategories();
+  }, [bookmarkedContent]);
+  //
   return (
     <>
-      {bookmarkedContent.length <= 0 ? (
+      {bookmarkedContent.length <= 0 && (
         <p className="col-start-2 col-end-12 grid place-items-center smTab:text-xl">
           You don't have any bookmarked items!
         </p>
-      ) : (
-        <>
-          <Content name={"Bookmarked Movies"} />
-          <Content name={"Bookmarked TV-Series"} />
-        </>
       )}
+      {bookmarkedContent.length >= 1 &&
+        bookmarkedMovies.length >= 1 && (
+          <Content name={"Bookmarked Movies"} contentData={bookmarkedMovies} />
+        )}
+      {bookmarkedContent.length >= 1 &&
+        bookmarkedTVSeries.length >= 1 && (
+          <Content
+            name={"Bookmarked TV-Series"}
+            contentData={bookmarkedTVSeries}
+          />
+        )}
     </>
   );
 };

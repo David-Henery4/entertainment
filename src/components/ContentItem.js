@@ -1,5 +1,7 @@
 import React from "react";
-import { greatLandsThumbSml, bookmarkIcon, movieIcon } from "../assets";
+import { useDispatch } from "react-redux";
+import { bookmarkContent, updateTrending, updateContent } from "../features/content/contentSlice";
+import { greatLandsThumbSml, bookmarkIcon, movieIcon, bookmarkIconFull } from "../assets";
 import basicThumb from "../assets/thumbnails/unresolved-cases/regular/small.jpg"
 
 const ContentItem = ({
@@ -12,14 +14,19 @@ const ContentItem = ({
   year,
 }) => {
   const { regular } = thumbnail;
+  const dispatch = useDispatch()
   // console.log(regular.small)
   return (
     <div className="grid gap-2 w-full">
       {/* IMAGE & BOOKMARK ICON */}
       <div className="relative w-full">
         {/* temp w&h for img */}
-        <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50">
-          <img src={bookmarkIcon} alt="bookmark-icon" />
+        <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50 hover:cursor-pointer" onClick={() => {
+            // dispatch(bookmarkContent(id))
+            // dispatch(updateTrending(id))
+            dispatch(updateContent(id))
+          }}>
+          <img src={isBookmarked ? bookmarkIconFull : bookmarkIcon} alt="bookmark-icon" />
         </div>
         {/* h-[110px] */}
         <img

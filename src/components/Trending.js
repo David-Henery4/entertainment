@@ -1,7 +1,10 @@
 import React from "react";
-import { beyondEarthTrending, bookmarkIcon, movieIcon } from "../assets";
+import { useDispatch } from "react-redux";
+import { bookmarkContent, updateTrending, updateContent } from "../features/content/contentSlice";
+import { beyondEarthTrending, bookmarkIcon, movieIcon, bookmarkIconFull } from "../assets";
 
 const Trending = ({ trendingData }) => {
+  const dispatch = useDispatch()
   return (
     <section className="col-start-2 col-end-13 grid gap-4 smTab:gap-7 overflow-x-auto">
       <h1 className="text-xl font-light smTab:text-subheadingTab">Trending</h1>
@@ -14,8 +17,18 @@ const Trending = ({ trendingData }) => {
               key={id}
               className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab"
             >
-              <div className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50">
-                <img src={bookmarkIcon} alt="bookmark-icon" />
+              <div
+                className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50 hover:cursor-pointer"
+                onClick={() => {
+                  // dispatch(bookmarkContent(id))
+                  // dispatch(updateTrending(id))
+                  dispatch(updateContent(id))
+                }}
+              >
+                <img
+                  src={isBookmarked ? bookmarkIconFull : bookmarkIcon}
+                  alt="bookmark-icon"
+                />
               </div>
               <img
                 className="absolute top-0 left-0 -z-0 w-full h-full"
