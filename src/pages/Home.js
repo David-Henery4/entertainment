@@ -1,22 +1,28 @@
-import React, {useEffect} from 'react'
-import { useSelector, useDispatch } from 'react-redux';
-import { getContent } from '../features/content/contentSlice';
-import {Trending, Content} from "../components";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getContent } from "../features/content/contentSlice";
+import { Trending, Content, LoadingSpinner } from "../components";
 
 const Home = () => {
-  const dispatch = useDispatch()
-  const { allContentData, trendingContent } = useSelector(
+  const dispatch = useDispatch();
+  const { allContentData, trendingContent, isLoading } = useSelector(
     (store) => store.content
   );
   useEffect(() => {
     dispatch(getContent());
-  }, [])
+  }, []);
   return (
     <>
-      <Trending trendingData={trendingContent}/>
-      <Content name={"Recommended for you"} contentData={allContentData}/>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <Trending trendingData={trendingContent} />
+          <Content name={"Recommended for you"} contentData={allContentData} />
+        </>
+      )}
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

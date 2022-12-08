@@ -30,21 +30,21 @@ export const getContent = createAsyncThunk("content/getContent", async () => {
 
 export const updateContent = createAsyncThunk(
   "content/updateContent",
-  async (id,{getState}) => {
+  async (id, { getState }) => {
     try {
-      const {allContentData} = getState().content
+      const { allContentData } = getState().content;
       // console.log(allContentData)
       // console.log(id)
-      const newData = allContentData.map(item => item.id === id ? {...item, isBookmarked: !item.isBookmarked} : item)
-      const newItem = newData.filter(item => item.id === id)
+      // const newData = allContentData.map(item => item.id === id ? {...item, isBookmarked: !item.isBookmarked} : item)
+      const newItem = allContentData.filter((item) => item.id === id);
       const newcontent = await axios.patch(
         `http://localhost:3006/content/${id}`,
         { isBookmarked: newItem[0].isBookmarked }
       );
-      return newcontent.data
+      return newcontent.data;
     } catch (error) {
-      console.log(error)
-      return error
+      console.log(error);
+      return error;
     }
   }
 );
@@ -92,6 +92,7 @@ const contentSlice = createSlice({
       }
     },
     updateTrending: (state, { payload }) => {
+      console.log(payload)
       const markedItem = state.trendingContent.find(
         (item) => item.id === payload
       );
@@ -99,6 +100,26 @@ const contentSlice = createSlice({
         markedItem.isBookmarked = !markedItem.isBookmarked;
       }
       // state.trendingContent = [state.trendingContent, markedItem]
+    },
+    updateTvSeries: (state, { payload }) => {
+      console.log(payload)
+      const markedItem = state.tvSeriesData.find((item) => item.id === payload);
+      if (markedItem) {
+        markedItem.isBookmarked = !markedItem.isBookmarked;
+      }
+    },
+    updateMovies: (state, { payload }) => {
+      console.log(payload)
+      const markedItem = state.moviesData.find((item) => item.id === payload);
+      if (markedItem) {
+        markedItem.isBookmarked = !markedItem.isBookmarked;
+      }
+    },
+    renderCurrentBookmarks: (state, { payload }) => {
+      const markedItems = state.allContentData.filter(
+        (item) => item.isBookmarked
+      );
+      state.bookmarkedContent = markedItems;
     },
   },
   extraReducers: (builder) => {
@@ -141,21 +162,20 @@ const contentSlice = createSlice({
       console.log(payload);
     });
     // UPDATE CONTENT
-    builder.addCase(updateContent.fulfilled, (state, {payload}) => {
-      console.log(payload)
+    builder.addCase(updateContent.fulfilled, (state, { payload }) => {
+      console.log(payload);
       // const newData = state.allContentData.find(item => item.id === payload.id)
       // newData.isBookmarked = payload.isBookmarked
-    })
-    builder.addCase(updateContent.rejected, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(updateContent.pending, (state, {payload}) => {
-      
-    })
+    });
+    builder.addCase(updateContent.rejected, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(updateContent.pending, (state, { payload }) => {});
   },
 });
 
 // FOR WHEN WE HAVE ACTIONS
-export const { bookmarkContent, updateTrending } = contentSlice.actions;
+export const { bookmarkContent, updateTrending, updateMovies, updateTvSeries, renderCurrentBookmarks } =
+  contentSlice.actions;
 
 export default contentSlice.reducer;
