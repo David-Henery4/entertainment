@@ -4,12 +4,17 @@ import { renderCurrentBookmarks } from "../features/content/contentSlice";
 import { Content, LoadingSpinner } from "../components";
 
 const Bookmarked = () => {
-  const { bookmarkedContent, allContentData, isLoading } = useSelector(
-    (store) => store.content
-  );
+  const [searchQueryArray, setSearchQueryArray] = useState([]);
+  const [queryLength, setQueryLength] = useState(0);
   const [bookmarkedMovies, setBookmarkedMovies] = useState([]);
   const [bookmarkedTVSeries, setBookmarkedTVSeries] = useState([]);
   const dispatch = useDispatch();
+  const {
+    bookmarkedContent,
+    allContentData,
+    isLoading,
+    searchQueryAndLocation,
+  } = useSelector((store) => store.content);
   //
   const sortCategories = () => {
     if (bookmarkedContent.length >= 1) {
@@ -21,6 +26,15 @@ const Bookmarked = () => {
       );
     }
   };
+  //
+  useEffect(() => {
+    if (Object.entries(searchQueryAndLocation).length > 0) {
+      const { query, path } = searchQueryAndLocation;
+      // const queriedItems = tvSeriesData.filter((item) =>
+      //   item.title.toLowerCase().includes(query.toLowerCase())
+      // );
+    }
+  }, [searchQueryAndLocation]);
   //
   useEffect(() => {
     dispatch(renderCurrentBookmarks());

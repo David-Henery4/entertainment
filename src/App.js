@@ -10,7 +10,6 @@ function App() {
   const { bookmarkedContent, isLoading} = useSelector((store) => store.content);
   const location = useLocation();
   const anyBookmarks = bookmarkedContent.length;
-  console.log(isLoading)
   //
   useEffect(() => {
     dispatch(getContent());

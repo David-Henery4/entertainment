@@ -8,6 +8,7 @@ const initialState = {
   tvSeriesData: [],
   bookmarkedContent: [],
   trendingContent: [],
+  searchQueryAndLocation: {},
   isLoading: false,
 };
 
@@ -121,6 +122,9 @@ const contentSlice = createSlice({
       );
       state.bookmarkedContent = markedItems;
     },
+    searchQuery: (state, {payload}) => {
+      state.searchQueryAndLocation = payload
+    }
   },
   extraReducers: (builder) => {
     // GET ALL DATA
@@ -175,7 +179,7 @@ const contentSlice = createSlice({
 });
 
 // FOR WHEN WE HAVE ACTIONS
-export const { bookmarkContent, updateTrending, updateMovies, updateTvSeries, renderCurrentBookmarks } =
+export const { bookmarkContent, updateTrending, updateMovies, updateTvSeries, renderCurrentBookmarks, searchQuery } =
   contentSlice.actions;
 
 export default contentSlice.reducer;
