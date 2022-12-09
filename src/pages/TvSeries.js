@@ -2,25 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTV } from "../features/content/contentSlice";
 import { Content, LoadingSpinner } from "../components";
+import handleSearch from "../search/searchFunction";
+
 
 const TvSeries = () => {
   const [searchQueryArray, setSearchQueryArray] = useState([]);
   const [queryLength, setQueryLength] = useState(0);
   const dispatch = useDispatch();
-  const { tvSeriesData, isLoading, searchQueryAndLocation } = useSelector(
-    (store) => store.content
-  );
+  const { tvSeriesData, isLoading, searchQueryAndLocation, searchQuery } =
+    useSelector((store) => store.content);
   //
   useEffect(() => {
-    if (Object.entries(searchQueryAndLocation).length > 0){
-      const {query, path} = searchQueryAndLocation
-      const queriedItems = tvSeriesData.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
-      );
-      setQueryLength(query.length)
-      setSearchQueryArray(queriedItems)
-    }
-  },[searchQueryAndLocation])
+    const queriedItems = handleSearch(searchQuery,tvSeriesData)
+    setQueryLength(searchQuery.length)
+    setSearchQueryArray(queriedItems)
+  },[searchQuery, tvSeriesData])
   //
   useEffect(() => {
     dispatch(getTV());

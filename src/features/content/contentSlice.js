@@ -9,6 +9,7 @@ const initialState = {
   bookmarkedContent: [],
   trendingContent: [],
   searchQueryAndLocation: {},
+  searchQuery: "",
   isLoading: false,
 };
 
@@ -123,7 +124,9 @@ const contentSlice = createSlice({
       state.bookmarkedContent = markedItems;
     },
     searchQuery: (state, {payload}) => {
+      const {query} = payload
       state.searchQueryAndLocation = payload
+      state.searchQuery = query
     }
   },
   extraReducers: (builder) => {

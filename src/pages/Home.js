@@ -3,24 +3,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { getContent } from "../features/content/contentSlice";
 import { Trending, Content, LoadingSpinner } from "../components";
 import { useState } from "react";
+import handleSearch from "../search/searchFunction";
 
 const Home = () => {
   const [searchQueryArray, setSearchQueryArray] = useState([]);
   const [queryLength, setQueryLength] = useState(0);
   const dispatch = useDispatch();
-  const { allContentData, trendingContent, isLoading, searchQueryAndLocation } =
-    useSelector((store) => store.content);
+  const {
+    allContentData,
+    trendingContent,
+    isLoading,
+    searchQueryAndLocation,
+    searchQuery,
+  } = useSelector((store) => store.content);
   //
   useEffect(() => {
-    if (Object.entries(searchQueryAndLocation).length > 0) {
-      const { query, page } = searchQueryAndLocation;
-      const queriedItems = allContentData.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
-      );
-      setQueryLength(query.length);
-      setSearchQueryArray(queriedItems);
-    }
-  }, [searchQueryAndLocation]);
+    const queriedItems = handleSearch(searchQuery,allContentData)
+    setQueryLength(searchQuery.length)
+    setSearchQueryArray(queriedItems)
+  }, [searchQuery, allContentData]);
   //
   useEffect(() => {
     dispatch(getContent());

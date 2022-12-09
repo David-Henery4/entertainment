@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { renderCurrentBookmarks } from "../features/content/contentSlice";
 import { Content, LoadingSpinner } from "../components";
+import handleSearch from "../search/searchFunction";
 
 const Bookmarked = () => {
   const [searchQueryArray, setSearchQueryArray] = useState([]);
@@ -14,6 +15,7 @@ const Bookmarked = () => {
     allContentData,
     isLoading,
     searchQueryAndLocation,
+    searchQuery,
   } = useSelector((store) => store.content);
   //
   const sortCategories = () => {
@@ -28,13 +30,10 @@ const Bookmarked = () => {
   };
   //
   useEffect(() => {
-    if (Object.entries(searchQueryAndLocation).length > 0) {
-      const { query, path } = searchQueryAndLocation;
-      // const queriedItems = tvSeriesData.filter((item) =>
-      //   item.title.toLowerCase().includes(query.toLowerCase())
-      // );
-    }
-  }, [searchQueryAndLocation]);
+    const queriedItems = handleSearch(searchQuery, bookmarkedContent);
+    setSearchQueryArray(queriedItems);
+    setQueryLength(searchQuery.length);
+  }, [searchQuery, bookmarkedContent]);
   //
   useEffect(() => {
     dispatch(renderCurrentBookmarks());
@@ -50,22 +49,42 @@ const Bookmarked = () => {
         <LoadingSpinner />
       ) : (
         <>
-          {bookmarkedContent.length <= 0 && (
-            <p className="col-start-2 col-end-12 grid place-items-center smTab:text-xl">
-              You don't have any bookmarked items!
-            </p>
-          )}
-          {bookmarkedContent.length >= 1 && bookmarkedMovies.length >= 1 && (
-            <Content
-              name={"Bookmarked Movies"}
-              contentData={bookmarkedMovies}
-            />
-          )}
-          {bookmarkedContent.length >= 1 && bookmarkedTVSeries.length >= 1 && (
-            <Content
-              name={"Bookmarked TV-Series"}
-              contentData={bookmarkedTVSeries}
-            />
+          {queryLength <= 0 ? (
+            <>
+              {bookmarkedContent.length <= 0 && (
+                <p className="col-start-2 col-end-12 grid place-items-center smTab:text-xl">
+                  You don't have any bookmarked items!
+                </p>
+              )}
+              {bookmarkedContent.length >= 1 &&
+                bookmarkedMovies.length >= 1 && (
+                  <Content
+                    name={"Bookmarked Movies"}
+                    contentData={bookmarkedMovies}
+                  />
+                )}
+              {bookmarkedContent.length >= 1 &&
+                bookmarkedTVSeries.length >= 1 && (
+                  <Content
+                    name={"Bookmarked TV-Series"}
+                    contentData={bookmarkedTVSeries}
+                  />
+                )}
+            </>
+          ) : (
+            <>
+              {bookmarkedContent.length <= 0 && (
+                <p className="col-start-2 col-end-12 grid place-items-center smTab:text-xl">
+                  You don't have any bookmarked items!
+                </p>
+              )}
+              {bookmarkedContent.length >= 1 && (
+                <Content
+                  name={`Found ${searchQueryArray.length} results for "${searchQueryAndLocation.query}"`}
+                  contentData={searchQueryArray}
+                />
+              )}
+            </>
           )}
         </>
       )}

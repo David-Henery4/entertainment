@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { bookmarkContent, updateTrending, updateContent, updateMovies, updateTvSeries } from "../features/content/contentSlice";
 import { greatLandsThumbSml, bookmarkIcon, movieIcon, bookmarkIconFull } from "../assets";
 import basicThumb from "../assets/thumbnails/unresolved-cases/regular/small.jpg"
@@ -13,9 +13,11 @@ const ContentItem = ({
   title,
   year,
 }) => {
-  const { regular } = thumbnail;
+  //
   const dispatch = useDispatch()
+  const { regular } = thumbnail;
   // console.log(regular.small)
+  //
   return (
     <div className="grid gap-2 w-full">
       {/* IMAGE & BOOKMARK ICON */}

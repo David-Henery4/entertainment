@@ -33,7 +33,7 @@ const Content = ({name, contentData}) => {
       <h2 className="text-xl font-light smTab:text-subheadingTab">{name}</h2>
       {/* item container */}
       <div className="grid grid-cols-contentRespon gap-4 smTab:gap-x-contentTabColGap smTab:gap-y-contentTabRowGap smTab:grid-cols-contentResponTab lg:gap-x-contentLapColGap lg:gap-y-contentLapRowGap lg:grid-cols-contentResponDesk">
-        {contentData && contentData.map(item => {
+        {contentData && contentData.map((item) => {
           return <ContentItem key={item.id} {...item}/>;
         })}
       </div>
