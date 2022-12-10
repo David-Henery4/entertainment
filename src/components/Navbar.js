@@ -5,7 +5,9 @@ import { LogoIcon, profileImg } from '../assets'
 
 const Navbar = () => {
   const navLinksStyles = (isActive) => {
-    return isActive ? "fill-white" : "fill-greyishBlue";
+    return isActive
+      ? "fill-white hover:fill-red"
+      : "fill-greyishBlue hover:fill-red";
   }
   //
   return (

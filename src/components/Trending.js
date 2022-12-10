@@ -8,10 +8,9 @@ import {
   updateTvSeries,
 } from "../features/content/contentSlice";
 import {
-  beyondEarthTrending,
-  bookmarkIcon,
+  BookmarkIconEmpty,
+  BookmarkIconFull,
   movieIcon,
-  bookmarkIconFull,
 } from "../assets";
 
 const Trending = ({ trendingData }) => {
@@ -26,10 +25,10 @@ const Trending = ({ trendingData }) => {
           return (
             <div
               key={id}
-              className="rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab"
+              className="hover:cursor-pointer rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab"
             >
               <div
-                className="grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50 hover:cursor-pointer"
+                className="group/mark grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50 hover:cursor-pointer hover:bg-white"
                 onClick={() => {
                   dispatch(bookmarkContent(id));
                   dispatch(updateMovies(id));
@@ -38,10 +37,11 @@ const Trending = ({ trendingData }) => {
                   dispatch(updateContent(id));
                 }}
               >
-                <img
-                  src={isBookmarked ? bookmarkIconFull : bookmarkIcon}
-                  alt="bookmark-icon"
-                />
+                {isBookmarked ? (
+                  <BookmarkIconFull className="fill-white group-hover/mark:fill-darkBlue" />
+                ) : (
+                  <BookmarkIconEmpty className="stroke-white group-hover/mark:stroke-darkBlue" />
+                )}
               </div>
               <img
                 className="absolute top-0 left-0 -z-0 w-full h-full"
