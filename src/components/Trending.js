@@ -11,22 +11,32 @@ import {
   BookmarkIconEmpty,
   BookmarkIconFull,
   movieIcon,
+  playIcon
 } from "../assets";
 
 const Trending = ({ trendingData }) => {
   const dispatch = useDispatch();
   return (
-    <section className="col-start-2 col-end-13 grid gap-4 smTab:gap-7 overflow-x-auto">
+    <section className="col-start-2 col-end-13 grid gap-4 smTab:gap-7 overflow-x-auto style-scroll pb-2">
       <h1 className="text-xl font-light smTab:text-subheadingTab">Trending</h1>
       <div className="flex justify-start items-center gap-4 smTab:gap-10">
         {trendingData.map((trending) => {
           const { year, title, rating, category, id, isBookmarked, thumbnail } =
             trending;
+            console.log(thumbnail)
           return (
             <div
               key={id}
-              className="hover:cursor-pointer rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab"
+              className="group/play hover:cursor-pointer rounded-lg overflow-hidden relative w-60 h-36 p-4 flex justify-start items-end smTab:w-trendingThumbTab smTab:h-trendingThumbTab"
             >
+              {/* HOVER STATE */}
+              <div className="group-hover/play:opacity-100 opacity-0 absolute top-0 left-0 w-full h-full bg-darkBlue/50 z-10 grid place-items-center">
+                <div className="flex gap-5 items-center bg-white/25 p-[3%] pr-[10%] rounded-full">
+                  <img src={playIcon} alt="play-icon" />
+                  <p className="text-lg font-medium">Play</p>
+                </div>
+              </div>
+              {/* IMG & ICON */}
               <div
                 className="group/mark grid place-items-center absolute z-10 top-2 right-2 w-8 h-8 rounded-full bg-darkBlue/50 hover:cursor-pointer hover:bg-white"
                 onClick={() => {
@@ -43,15 +53,25 @@ const Trending = ({ trendingData }) => {
                   <BookmarkIconEmpty className="stroke-white group-hover/mark:stroke-darkBlue" />
                 )}
               </div>
-              <img
-                className="absolute top-0 left-0 -z-0 w-full h-full"
-                src={
-                  thumbnail.trending &&
-                  require(`../assets/thumbnails/${thumbnail.trending.large}`)
-                }
-                // src={beyondEarthTrending}
-                alt="beyond-earth-trending-thumbnail"
-              />
+              <picture>
+                <source
+                  srcSet={
+                    thumbnail.trending &&
+                    require(`../assets/thumbnails/${thumbnail.trending.large}`)
+                  }
+                  media="(min-width:45.62em)"
+                />
+                <img
+                  className="absolute top-0 left-0 -z-0 w-full h-full"
+                  srcSet={
+                    thumbnail.trending &&
+                    require(`../assets/thumbnails/${thumbnail.trending.small}`)
+                  }
+                  // src={beyondEarthTrending}
+                  alt="beyond-earth-trending-thumbnail"
+                />
+              </picture>
+              {/* TEXT */}
               <div className="z-10 relative flex flex-col justify-center items-start">
                 <div className="flex justify-center items-center gap-2 text-xs smTab:text-bodySml text-white/75">
                   <p>{year}</p>

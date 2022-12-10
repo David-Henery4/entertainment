@@ -22,7 +22,6 @@ const ContentItem = ({
   //
   const dispatch = useDispatch();
   const { regular } = thumbnail;
-  // console.log(regular.small)
   //
   return (
     <div className="grid gap-2 w-full">
@@ -52,11 +51,17 @@ const ContentItem = ({
             <BookmarkIconEmpty className="stroke-white group-hover/mark:stroke-darkBlue" />
           )}
         </div>
-        <img
-          className="w-full rounded-lg"
-          src={regular && require(`../assets/thumbnails/${regular.small}`)}
-          alt="thumbnail"
-        />
+        <picture>
+          <source
+            srcSet={regular && require(`../assets/thumbnails/${regular.medium}`)}
+            media="(min-width:45.62em)"
+          />
+          <img
+            className="w-full rounded-lg"
+            srcSet={regular && require(`../assets/thumbnails/${regular.small}`)}
+            alt="thumbnail"
+          />
+        </picture>
       </div>
       {/* TEXT INFO */}
       <div className="z-10 relative flex flex-col justify-center items-start">
