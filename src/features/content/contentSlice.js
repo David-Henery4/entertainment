@@ -3,6 +3,8 @@ import axios from "axios";
 //  http://localhost:3006/content (JSON SERVER CALL)
 
 const initialState = {
+  userInfo: {},
+  userToken: {},
   allContentData: [],
   moviesData: [],
   tvSeriesData: [],
@@ -11,13 +13,9 @@ const initialState = {
   searchQueryAndLocation: {},
   searchQuery: "",
   isLoading: false,
+  isError: null,
+  isSuccess: false,
 };
-
-// const getData = async () => {
-//   const res = await axios.get("http://localhost:3006/content");
-//   console.log(res.data);
-// };
-// getData()
 
 export const getContent = createAsyncThunk("content/getContent", async () => {
   try {
@@ -29,7 +27,7 @@ export const getContent = createAsyncThunk("content/getContent", async () => {
     return error;
   }
 });
-
+//
 export const updateContent = createAsyncThunk(
   "content/updateContent",
   async (id, { getState }) => {
@@ -50,7 +48,7 @@ export const updateContent = createAsyncThunk(
     }
   }
 );
-
+//
 export const getMovies = createAsyncThunk("content/getMovies", async () => {
   try {
     const res = await axios.get("http://localhost:3006/content?category=Movie");
@@ -59,7 +57,7 @@ export const getMovies = createAsyncThunk("content/getMovies", async () => {
     return error;
   }
 });
-
+//
 export const getTV = createAsyncThunk("content/getTV", async () => {
   try {
     const res = await axios.get(
@@ -71,7 +69,26 @@ export const getTV = createAsyncThunk("content/getTV", async () => {
   }
 });
 
-// getContent()
+// SIGN UP & LOGIN AUTH
+export const signUpUser = createAsyncThunk("content/signUpUser" ,async(signUpInfo) => {
+  try {
+    const res = await axios.post("http://localhost:3006/users", signUpInfo);
+    return res.data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+})
+//
+export const loginUser = createAsyncThunk("content/loginUser" ,async (loginInfo) => {
+  try {
+    const res = await axios.post("http://localhost:3006/login");
+    return res.data
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+})
 
 const contentSlice = createSlice({
   name: "content",
@@ -178,6 +195,26 @@ const contentSlice = createSlice({
       console.log(payload);
     });
     builder.addCase(updateContent.pending, (state, { payload }) => {});
+    // AUTH USER LOGIN
+    builder.addCase(loginUser.fulfilled, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(loginUser.rejected, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(loginUser.pending, (state, {payload}) => {
+      console.log(payload)
+    })
+    // AUTH USER SIGNUP
+    builder.addCase(signUpUser.fulfilled, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(signUpUser.rejected, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(signUpUser.pending, (state, {payload}) => {
+      console.log(payload)
+    })
   },
 });
 

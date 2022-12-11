@@ -11,6 +11,7 @@ const LogInSignUp = () => {
     email: "",
     password: "",
     repeatedPassword: "",
+    bookmarks: []
   });
   //
   const handleEmptyInputs = () => {
