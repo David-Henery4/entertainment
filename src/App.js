@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navbar, SearchInput} from "./components";
 import { getContent} from "./features/content/contentSlice";
 import { useEffect } from "react";
+import { LogInSignUp } from "./pages";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function App() {
   //
   return (
     <div className="App font-outfit font-light bg-darkBlue text-white">
+      <LogInSignUp/>
       <main
         className="relative content-start items-baseline pb-14 smTab:pt-6 w-full min-h-screen grid grid-cols-mobBleed gap-y-6 smTab:grid-cols-tabBleed smTab:gap-y-8 lg:grid-cols-deskBleed xl:grid-cols-lrgDeskBleed xl:grid-rows-lrgDeskRows"
         style={{

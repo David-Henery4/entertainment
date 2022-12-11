@@ -23,7 +23,6 @@ const Trending = ({ trendingData }) => {
         {trendingData.map((trending) => {
           const { year, title, rating, category, id, isBookmarked, thumbnail } =
             trending;
-            console.log(thumbnail)
           return (
             <div
               key={id}
