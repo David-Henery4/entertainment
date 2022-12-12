@@ -70,25 +70,31 @@ export const getTV = createAsyncThunk("content/getTV", async () => {
 });
 
 // SIGN UP & LOGIN AUTH
-export const signUpUser = createAsyncThunk("content/signUpUser" ,async(signUpInfo) => {
-  try {
-    const res = await axios.post("http://localhost:3006/users", signUpInfo);
-    return res.data
-  } catch (error) {
-    console.log(error)
-    return error
+export const signUpUser = createAsyncThunk(
+  "content/signUpUser",
+  async (signUpInfo) => {
+    try {
+      const res = await axios.post("http://localhost:3006/users", signUpInfo);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
   }
-})
+);
 //
-export const loginUser = createAsyncThunk("content/loginUser" ,async (loginInfo) => {
-  try {
-    const res = await axios.post("http://localhost:3006/login");
-    return res.data
-  } catch (error) {
-    console.log(error);
-    return error;
+export const loginUser = createAsyncThunk(
+  "content/loginUser",
+  async (loginInfo) => {
+    try {
+      const res = await axios.post("http://localhost:3006/login");
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
   }
-})
+);
 
 const contentSlice = createSlice({
   name: "content",
@@ -111,7 +117,7 @@ const contentSlice = createSlice({
       }
     },
     updateTrending: (state, { payload }) => {
-      console.log(payload)
+      console.log(payload);
       const markedItem = state.trendingContent.find(
         (item) => item.id === payload
       );
@@ -121,14 +127,14 @@ const contentSlice = createSlice({
       // state.trendingContent = [state.trendingContent, markedItem]
     },
     updateTvSeries: (state, { payload }) => {
-      console.log(payload)
+      console.log(payload);
       const markedItem = state.tvSeriesData.find((item) => item.id === payload);
       if (markedItem) {
         markedItem.isBookmarked = !markedItem.isBookmarked;
       }
     },
     updateMovies: (state, { payload }) => {
-      console.log(payload)
+      console.log(payload);
       const markedItem = state.moviesData.find((item) => item.id === payload);
       if (markedItem) {
         markedItem.isBookmarked = !markedItem.isBookmarked;
@@ -140,11 +146,11 @@ const contentSlice = createSlice({
       );
       state.bookmarkedContent = markedItems;
     },
-    searchQuery: (state, {payload}) => {
-      const {query} = payload
-      state.searchQueryAndLocation = payload
-      state.searchQuery = query
-    }
+    searchQuery: (state, { payload }) => {
+      const { query } = payload;
+      state.searchQueryAndLocation = payload;
+      state.searchQuery = query;
+    },
   },
   extraReducers: (builder) => {
     // GET ALL DATA
@@ -196,30 +202,36 @@ const contentSlice = createSlice({
     });
     builder.addCase(updateContent.pending, (state, { payload }) => {});
     // AUTH USER LOGIN
-    builder.addCase(loginUser.fulfilled, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(loginUser.rejected, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(loginUser.pending, (state, {payload}) => {
-      console.log(payload)
-    })
+    builder.addCase(loginUser.fulfilled, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(loginUser.rejected, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(loginUser.pending, (state, { payload }) => {
+      console.log(payload);
+    });
     // AUTH USER SIGNUP
-    builder.addCase(signUpUser.fulfilled, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(signUpUser.rejected, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(signUpUser.pending, (state, {payload}) => {
-      console.log(payload)
-    })
+    builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(signUpUser.rejected, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(signUpUser.pending, (state, { payload }) => {
+      console.log(payload);
+    });
   },
 });
 
 // FOR WHEN WE HAVE ACTIONS
-export const { bookmarkContent, updateTrending, updateMovies, updateTvSeries, renderCurrentBookmarks, searchQuery } =
-  contentSlice.actions;
+export const {
+  bookmarkContent,
+  updateTrending,
+  updateMovies,
+  updateTvSeries,
+  renderCurrentBookmarks,
+  searchQuery,
+} = contentSlice.actions;
 
 export default contentSlice.reducer;

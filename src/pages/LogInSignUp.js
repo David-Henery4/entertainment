@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useValidation from "../validation/useValidation";
 import { LogoIcon } from "../assets";
 
 const LogInSignUp = () => {
@@ -14,6 +15,11 @@ const LogInSignUp = () => {
     bookmarks: []
   });
   //
+  const handleFormSubmit = (userData) => {
+    
+  }
+  const {errors, handleChange, handleSubmit, values} = useValidation(handleFormSubmit)
+  // EMPTY INPUTS WHEN SWITCHING FORMS
   const handleEmptyInputs = () => {
     if (isSignUp) {
       setLoginData({
@@ -41,7 +47,12 @@ const LogInSignUp = () => {
         <h2 className="text-[32px] font-light text-left">
           {isSignUp ? "Sign Up" : "Login"}
         </h2>
-        <form className="grid gap-6">
+        <form
+          className="grid gap-6"
+          name="login-signup-form"
+          id="login-signup-form"
+          onSubmit={handleSubmit}
+        >
           <input
             className="bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
             type="email"
@@ -86,7 +97,15 @@ const LogInSignUp = () => {
           )}
         </form>
         <div className="grid gap-6">
-          <button className="w-full bg-red h-12 rounded-md">
+          <button
+            className="w-full bg-red h-12 rounded-md"
+            type="submit"
+            form="login-signup-form"
+            onClick={(e) => {
+              e.preventDefault()
+              // isSignUp ? validation("SIGNUP",signUpData) : validation("LOGIN",loginData);
+            }}
+          >
             {isSignUp ? "Create an account" : "Login to your account"}
           </button>
           <div className="flex gap-2 w-full justify-center">
