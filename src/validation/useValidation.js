@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-const useValidation = (callBackSubmit) => {
+const useValidation = (callBackSubmit, isSignup) => {
   const [emailError, setEmailError] = useState({
     isEmailError: false,
     msg: "",
@@ -10,7 +10,12 @@ const useValidation = (callBackSubmit) => {
     isPasswordError: false,
     msg: "",
   });
+  const [repeatPasswordError, setRepeatPasswordError] = useState({
+    isRepeatPasswordError: false,
+    msg: "",
+  });
   const [values, setValues] = useState({});
+  //
   //
   const validateEmail = (initialEmail) => {
     if (initialEmail === "") {
@@ -65,143 +70,93 @@ const useValidation = (callBackSubmit) => {
     }
   };
   //
-  const validateRepeatPassword = () => {};
+  const validateRepeatPassword = (initialRepeatPassword, initialPassword) => {
+    if (initialRepeatPassword === "") {
+      setRepeatPasswordError({
+        isRepeatPasswordError: true,
+        msg: "Can't be empty",
+      });
+    }
+    if (initialPassword !== initialRepeatPassword) {
+      setRepeatPasswordError({
+        isRepeatPasswordError: true,
+        msg: "passwords need to match",
+      });
+    }
+    if (
+      initialRepeatPassword !== "" &&
+      initialRepeatPassword.length >= 4 &&
+      initialPassword === initialRepeatPassword
+    ) {
+      const repeatPassword = initialRepeatPassword.trim();
+      setRepeatPasswordError({
+        isRepeatPasswordError: false,
+        msg: "",
+      });
+      setValues((oldValues) => {
+        return { ...oldValues, repeatPassword };
+      });
+    }
+  };
+  //
   //
   const checkLogInInputs = ({ email, password }) => {
     validateEmail(email);
     validatePassword(password);
   };
-  useEffect(() => {
-    if (
-      !emailError.isEmailError &&
-      !passwordError.isPasswordError &&
-      Object.entries(values).length >= 1
-    ) {
-      callBackSubmit("LOGIN CONFIRMED",values);
-    }
-  }, [values, emailError, passwordError]);
+  const checkSignUpInputs = ({ email, password, repeatedPassword }) => {
+    validateEmail(email);
+    validatePassword(password);
+    validateRepeatPassword(repeatedPassword, password);
+  };
   //
-  const checkSignUpInputs = ({ email, password, repeatedPassword }) => {};
   //
-  const validation = (formType, userData) => {
-    console.log(formType, userData);
-    if (formType === "LOGIN") {
+  const validation = (userData) => {
+    if (!isSignup) {
       checkLogInInputs(userData);
     }
-    if (formType === "SIGNUP") {
+    if (isSignup) {
       checkSignUpInputs(userData);
     }
   };
   //
-  return { validation, emailError, passwordError };
+  //
+  const loginValuesConfirmation = () => {
+    if (!isSignup) {
+      if (
+        !emailError.isEmailError &&
+        !passwordError.isPasswordError &&
+        Object.entries(values).length >= 1
+      ) {
+        callBackSubmit("LOGIN CONFIRMED", values);
+      }
+    }
+  }
+  //
+  const signupValuesConfirmation = () => {
+    if (isSignup) {
+      if (
+        !emailError.isEmailError &&
+        !passwordError.isPasswordError &&
+        !repeatPasswordError.isRepeatPasswordError &&
+        Object.entries(values).length >= 1
+      ) {
+        callBackSubmit("SIGNUP CONFIRMED", values);
+      }
+    }
+  }
+  //
+  //
+  useEffect(() => {
+    signupValuesConfirmation()
+    loginValuesConfirmation()
+  }, [values, emailError, passwordError]);
+  //
+  //
+  return { validation, emailError, passwordError, repeatPasswordError };
 };
 
 export default useValidation;
 
 //*****************************************************************//
-// WAS TRYING
 
-// const useValidation = () => {
-//   //
-//   const [isSignUpErrors, setIsSignUpErrors] = useState({});
-//   const [isLoginErrors, setIsLoginErrors] = useState({});
-//   //
-//   const checkLogInInputs = (userData) => {};
-//   //
-//   const checkSignUpInputs = (userData) => {};
-//   //
-//   const validation = (formType, userData) => {
-//     console.log(formType, userData);
-//     if (formType === "LOGIN") {
-//       const { email, password } = userData;
-//     }
-//     if (formType === "SIGNUP") {
-//       const { email, password, repeatedPassword } = userData;
-//     }
-//   };
-
-//   return { validation };
-// };
-
-//************************************************************//
-
-// ALSO TRYING
-
-// const useValidation = (callBackSubmit) => {
-//   // FORM VALUES
-//   const [values, setValues] = useState({});
-//   // FORM ERRORS
-//   const [errors, setErrors] = useState({});
-
-//   // VALIDATE INPUT VALUES
-//   const validate = (e, value, name) => {
-//     // CHECKING NAME ATTRIBUTE
-//     switch (name) {
-//       // VALID EMAIL INPUT
-//       case "email":
-//         if (
-//           !new RegExp(
-//             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-//           ).test(value)
-//         ) {
-//           setErrors({
-//             ...errors,
-//             email: "Wrong format",
-//           });
-//         } else {
-//           const newObj = errors;
-//           delete newObj.email;
-//           setErrors(newObj);
-//         }
-//         break;
-//       // VALIDATE PASSWORD
-//       case "password":
-//         if (value.length <= 4) {
-//           setErrors({
-//             ...errors,
-//             password: "Needs to be at least 4 characters",
-//           });
-//         } else {
-//           const newObj = errors;
-//           delete newObj.password;
-//           setErrors(newObj);
-//         }
-//         break;
-//       // CHECK REPEATING PASSWORD
-//       case "repeat-password":
-//         if (value.length <= 4 && value !== values?.password) {
-//           setErrors({
-//             ...errors,
-//             repeatingPassword: "Needs to match password",
-//           });
-//         } else {
-//           const newObj = errors;
-//           delete newObj.repeatingPassword;
-//         }
-//         break;
-//       //
-//       default:
-//         break;
-//     }
-//   };
-//   //
-//   const handleSubmit = (e) => {
-//     if (e) e.preventDefault();
-//     if (Object.keys(errors).length <= 0 && Object.keys(values).length >= 1) {
-//       callBackSubmit();
-//     }
-//   };
-//   //
-//   const handleChange = (e) => {
-//     e.preventDefault();
-//     let name = e.target.name;
-//     let value = e.target.value;
-//     validate(e, value, name);
-//     setValues({
-//       ...values,
-//       [name]: value,
-//     });
-//   };
-//   //
-//   return { values, errors, handleSubmit, handleChange };
-// };

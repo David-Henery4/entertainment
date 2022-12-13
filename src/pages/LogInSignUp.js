@@ -18,8 +18,8 @@ const LogInSignUp = () => {
   const handleSubmitCallback = (status,values) => {
     console.log(status, values);
   };
-  const { validation, emailError, passwordError } =
-    useValidation(handleSubmitCallback);
+  const { validation, emailError, passwordError, repeatPasswordError } =
+    useValidation(handleSubmitCallback, isSignUp);
   //
   // EMPTY INPUTS WHEN SWITCHING FORMS
   const handleEmptyInputs = () => {
@@ -55,9 +55,7 @@ const LogInSignUp = () => {
           id="login-signup-form"
           onSubmit={(e) => {
             e.preventDefault();
-            isSignUp
-              ? validation("SIGNUP", signUpData)
-              : validation("LOGIN", loginData);
+            isSignUp ? validation(signUpData) : validation(loginData);
           }}
         >
           <div className="relative">
@@ -111,20 +109,32 @@ const LogInSignUp = () => {
             )}
           </div>
           {isSignUp && (
-            <input
-              className="bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
-              type="password"
-              name="repeat-password"
-              id="repeat-password"
-              placeholder="Repeat Password"
-              value={signUpData.repeatedPassword}
-              onChange={(e) =>
-                setSignUpData({
-                  ...signUpData,
-                  repeatedPassword: e.target.value,
-                })
-              }
-            />
+            <div className="relative">
+              <input
+                className="w-full bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
+                type="password"
+                name="repeat-password"
+                id="repeat-password"
+                placeholder="Repeat Password"
+                style={{
+                  borderBottomColor: repeatPasswordError.isRepeatPasswordError
+                    ? "#FC4747"
+                    : "#5A698F",
+                }}
+                value={signUpData.repeatedPassword}
+                onChange={(e) =>
+                  setSignUpData({
+                    ...signUpData,
+                    repeatedPassword: e.target.value,
+                  })
+                }
+              />
+              {repeatPasswordError?.isRepeatPasswordError && (
+                <p className="text-red text-xs absolute bottom-1 right-0">
+                  {repeatPasswordError.msg}
+                </p>
+              )}
+            </div>
           )}
         </form>
         <div className="grid gap-6">
