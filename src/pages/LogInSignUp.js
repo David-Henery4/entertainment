@@ -12,20 +12,22 @@ const LogInSignUp = () => {
     email: "",
     password: "",
     repeatedPassword: "",
-    bookmarks: []
+    bookmarks: [],
   });
   //
-  const handleFormSubmit = (userData) => {
-    
-  }
-  const {errors, handleChange, handleSubmit, values} = useValidation(handleFormSubmit)
+  const handleSubmitCallback = (status,values) => {
+    console.log(status, values);
+  };
+  const { validation, emailError, passwordError } =
+    useValidation(handleSubmitCallback);
+  //
   // EMPTY INPUTS WHEN SWITCHING FORMS
   const handleEmptyInputs = () => {
     if (isSignUp) {
       setLoginData({
         email: "",
-        password: ""
-      })
+        password: "",
+      });
     }
     if (!isSignUp) {
       setSignUpData({
@@ -34,11 +36,11 @@ const LogInSignUp = () => {
         repeatedPassword: "",
       });
     }
-  }
+  };
   //
   useEffect(() => {
-    handleEmptyInputs()
-  }, [isSignUp])
+    handleEmptyInputs();
+  }, [isSignUp]);
   //
   return (
     <div className="fixed top-0 left-0 h-full w-full bg-darkBlue z-20 flex flex-col items-center justify-center">
@@ -51,34 +53,63 @@ const LogInSignUp = () => {
           className="grid gap-6"
           name="login-signup-form"
           id="login-signup-form"
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+            isSignUp
+              ? validation("SIGNUP", signUpData)
+              : validation("LOGIN", loginData);
+          }}
         >
-          <input
-            className="bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email address"
-            value={isSignUp ? signUpData.email : loginData.email}
-            onChange={(e) => {
-              isSignUp
-                ? setSignUpData({ ...signUpData, email: e.target.value })
-                : setLoginData({ ...loginData, email: e.target.value });
-            }}
-          />
-          <input
-            className="bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            value={isSignUp ? signUpData.password : loginData.password}
-            onChange={(e) => {
-              isSignUp
-                ? setSignUpData({ ...signUpData, password: e.target.value })
-                : setLoginData({ ...loginData, password: e.target.value });
-            }}
-          />
+          <div className="relative">
+            <input
+              className="bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none w-full"
+              type="text"
+              name="email"
+              id="email"
+              placeholder="Email address"
+              value={isSignUp ? signUpData.email : loginData.email}
+              style={{
+                borderBottomColor: passwordError.isPasswordError
+                  ? "#FC4747"
+                  : "#5A698F",
+              }}
+              onChange={(e) => {
+                isSignUp
+                  ? setSignUpData({ ...signUpData, email: e.target.value })
+                  : setLoginData({ ...loginData, email: e.target.value });
+              }}
+            />
+            {emailError?.isEmailError && (
+              <p className="text-red text-xs absolute bottom-1 right-0">
+                {emailError.msg}
+              </p>
+            )}
+          </div>
+          <div className="relative">
+            <input
+              className="w-full bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              style={{
+                borderBottomColor: passwordError.isPasswordError
+                  ? "#FC4747"
+                  : "#5A698F",
+              }}
+              value={isSignUp ? signUpData.password : loginData.password}
+              onChange={(e) => {
+                isSignUp
+                  ? setSignUpData({ ...signUpData, password: e.target.value })
+                  : setLoginData({ ...loginData, password: e.target.value });
+              }}
+            />
+            {passwordError?.isPasswordError && (
+              <p className="text-red text-xs absolute bottom-1 right-0">
+                {passwordError.msg}
+              </p>
+            )}
+          </div>
           {isSignUp && (
             <input
               className="bg-transparent border-b-[1px] border-b-greyishBlue pb-4 outline-none"
@@ -101,10 +132,6 @@ const LogInSignUp = () => {
             className="w-full bg-red h-12 rounded-md"
             type="submit"
             form="login-signup-form"
-            onClick={(e) => {
-              e.preventDefault()
-              // isSignUp ? validation("SIGNUP",signUpData) : validation("LOGIN",loginData);
-            }}
           >
             {isSignUp ? "Create an account" : "Login to your account"}
           </button>
