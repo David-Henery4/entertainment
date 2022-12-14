@@ -1,3 +1,4 @@
+import ProtectedRoute from "./ProtectedRoute";
 import Home from "./Home";
 import TvSeries from "./TvSeries";
 import Movies from "./Movies";
@@ -10,4 +11,5 @@ export {
   Movies,
   Bookmarked,
   LogInSignUp,
+  ProtectedRoute,
 }

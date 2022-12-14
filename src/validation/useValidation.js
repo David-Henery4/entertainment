@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 
 const useValidation = (callBackSubmit, isSignup) => {
@@ -131,7 +131,7 @@ const useValidation = (callBackSubmit, isSignup) => {
         callBackSubmit("LOGIN CONFIRMED", values);
       }
     }
-  }
+  };
   //
   const signupValuesConfirmation = () => {
     if (isSignup) {
@@ -144,12 +144,12 @@ const useValidation = (callBackSubmit, isSignup) => {
         callBackSubmit("SIGNUP CONFIRMED", values);
       }
     }
-  }
+  };
   //
   //
   useEffect(() => {
-    signupValuesConfirmation()
-    loginValuesConfirmation()
+    signupValuesConfirmation();
+    loginValuesConfirmation();
   }, [values, emailError, passwordError]);
   //
   //
@@ -159,4 +159,3 @@ const useValidation = (callBackSubmit, isSignup) => {
 export default useValidation;
 
 //*****************************************************************//
-
