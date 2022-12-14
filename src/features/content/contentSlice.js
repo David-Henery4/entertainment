@@ -3,8 +3,8 @@ import axios from "axios";
 //  http://localhost:3006/content (JSON SERVER CALL)
 
 const initialState = {
-  userInfo: {},
-  userToken: {},
+  userInfo: null,
+  userToken: null,
   allContentData: [],
   moviesData: [],
   tvSeriesData: [],

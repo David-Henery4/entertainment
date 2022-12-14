@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import useValidation from "../validation/useValidation";
 import { LogoIcon } from "../assets";
+import { useNavigate } from "react-router-dom";
 
-const LogInSignUp = () => {
+const LogInSignUp = ({ setUser }) => {
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
@@ -15,7 +17,7 @@ const LogInSignUp = () => {
     bookmarks: [],
   });
   //
-  const handleSubmitCallback = (status,values) => {
+  const handleSubmitCallback = (status, values) => {
     console.log(status, values);
   };
   const { validation, emailError, passwordError, repeatPasswordError } =
@@ -43,7 +45,7 @@ const LogInSignUp = () => {
   }, [isSignUp]);
   //
   return (
-    <div className="fixed top-0 left-0 h-full w-full bg-darkBlue z-20 flex flex-col items-center justify-center">
+    <div className="fixed top-0 left-0 h-full w-full bg-darkBlue z-20 flex flex-col items-center justify-center font-outfit font-light text-white">
       <LogoIcon className="relative bottom-[60px]" />
       <div className="max-w-[400px] bg-semiDarkBlue p-6 w-11/12 rounded-[10px] grid gap-10">
         <h2 className="text-[32px] font-light text-left">
@@ -142,6 +144,10 @@ const LogInSignUp = () => {
             className="w-full bg-red h-12 rounded-md"
             type="submit"
             form="login-signup-form"
+            onClick={() => {
+              setUser(true);
+              navigate("/");
+            }}
           >
             {isSignUp ? "Create an account" : "Login to your account"}
           </button>
