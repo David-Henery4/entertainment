@@ -6,6 +6,7 @@ import {
   updateContent,
   updateMovies,
   updateTvSeries,
+  getUserBookmarks,
 } from "../features/content/contentSlice";
 import { movieIcon, BookmarkIconEmpty, BookmarkIconFull, playIcon } from "../assets";
 
@@ -43,6 +44,8 @@ const ContentItem = ({
             dispatch(updateTvSeries(id));
             dispatch(updateTrending(id));
             dispatch(updateContent(id));
+            // TESTING
+            dispatch(getUserBookmarks(id))
           }}
         >
           {isBookmarked ? (

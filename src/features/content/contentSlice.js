@@ -18,6 +18,11 @@ const initialState = {
   isSuccess: false,
 };
 
+
+
+
+
+//*******************ORIGINAL**FETCHES******************//
 export const getContent = createAsyncThunk("content/getContent", async () => {
   try {
     const res = await axios.get("http://localhost:3006/content");
@@ -112,6 +117,29 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const getUserBookmarks = createAsyncThunk("content/getUserBookmarks", async (id, {getState}) => {
+  try {
+    const {allContentData, userInfo} = getState().content
+    const choosenBookmarkItems = allContentData.filter(item => item.isBookmarked)
+    const res = await axios.patch(
+      `http://localhost:3006/users/${userInfo.id}`,
+      {
+        bookmarks: choosenBookmarkItems
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(res)
+    return res.data
+  } catch (error) {
+    return error
+  }
+})
+
+//******************CREATED**SLICE***************************************// 
 const contentSlice = createSlice({
   name: "content",
   initialState,
@@ -248,6 +276,16 @@ const contentSlice = createSlice({
     builder.addCase(signUpUser.pending, (state, { payload }) => {
       console.log(payload);
     });
+    // TESTING PUT BOOKMARKS TO USER
+    builder.addCase(getUserBookmarks.fulfilled, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(getUserBookmarks.pending, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(getUserBookmarks.rejected, (state, {payload}) => {
+      console.log(payload)
+    })
   },
 });
 
