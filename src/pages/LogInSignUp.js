@@ -23,7 +23,10 @@ const LogInSignUp = () => {
   //
   const handleSubmitCallback = (status, values) => {
     console.log(status, values);
-    if (status === "LOGIN"){}
+    if (status === "LOGIN"){
+      console.log(values)
+      dispatch(loginUser(values))
+    }
     if (status === "SIGNUP"){
       dispatch(signUpUser(values))
     }

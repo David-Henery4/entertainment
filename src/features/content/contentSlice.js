@@ -70,7 +70,10 @@ export const getTV = createAsyncThunk("content/getTV", async () => {
   }
 });
 
+
+//////*******************************************//////
 // SIGN UP & LOGIN AUTH
+
 export const signUpUser = createAsyncThunk(
   "content/signUpUser",
   async (signUpInfo) => {
@@ -94,7 +97,13 @@ export const loginUser = createAsyncThunk(
   "content/loginUser",
   async (loginInfo) => {
     try {
-      const res = await axios.post("http://localhost:3006/login");
+      console.log(loginInfo)
+      const res = await axios.post("http://localhost:3006/login", loginInfo, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res.data)
       return res.data;
     } catch (error) {
       console.log(error);
@@ -215,7 +224,10 @@ const contentSlice = createSlice({
     //
     // AUTH USER LOGIN
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
-      console.log(payload);
+      const { accessToken, user } = payload;
+      state.userToken = accessToken
+      state.userInfo = user
+      state.userAuth = true
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       console.log(payload);
