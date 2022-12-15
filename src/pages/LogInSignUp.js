@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import useValidation from "../validation/useValidation";
 import { LogoIcon } from "../assets";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signUpUser, loginUser } from "../features/content/contentSlice";
 
 const LogInSignUp = ({ setUser }) => {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [loginData, setLoginData] = useState({
@@ -19,6 +22,12 @@ const LogInSignUp = ({ setUser }) => {
   //
   const handleSubmitCallback = (status, values) => {
     console.log(status, values);
+    if (status === "LOGIN"){}
+    if (status === "SIGNUP"){
+      // dispatch(signUpUser())
+    }
+    setUser(true);
+    navigate("/");
   };
   const { validation, emailError, passwordError, repeatPasswordError } =
     useValidation(handleSubmitCallback, isSignUp);
@@ -144,10 +153,6 @@ const LogInSignUp = ({ setUser }) => {
             className="w-full bg-red h-12 rounded-md"
             type="submit"
             form="login-signup-form"
-            onClick={() => {
-              setUser(true);
-              navigate("/");
-            }}
           >
             {isSignUp ? "Create an account" : "Login to your account"}
           </button>

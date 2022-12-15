@@ -128,7 +128,7 @@ const useValidation = (callBackSubmit, isSignup) => {
         !passwordError.isPasswordError &&
         Object.entries(values).length >= 1
       ) {
-        callBackSubmit("LOGIN CONFIRMED", values);
+        callBackSubmit("LOGIN", values);
       }
     }
   };
@@ -141,7 +141,7 @@ const useValidation = (callBackSubmit, isSignup) => {
         !repeatPasswordError.isRepeatPasswordError &&
         Object.entries(values).length >= 1
       ) {
-        callBackSubmit("SIGNUP CONFIRMED", values);
+        callBackSubmit("SIGNUP", values);
       }
     }
   };

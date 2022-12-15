@@ -74,7 +74,12 @@ export const signUpUser = createAsyncThunk(
   "content/signUpUser",
   async (signUpInfo) => {
     try {
-      const res = await axios.post("http://localhost:3006/users", signUpInfo);
+      const res = await axios.post("http://localhost:3006/users", signUpInfo, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(res.data)
       return res.data;
     } catch (error) {
       console.log(error);
