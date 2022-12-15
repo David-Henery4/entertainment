@@ -1,9 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet, } from 'react-router-dom'
 // Outlet
 
 const ProtectedRoute = ({children ,user}) => {
-  if (!user) return <Navigate to="login"  />;
+  const { userAuth } = useSelector((store) => store.content);
+  if (!userAuth) return <Navigate to="login"  />;
   return <Outlet/>  
 }
 

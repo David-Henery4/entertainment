@@ -3,6 +3,7 @@ import axios from "axios";
 //  http://localhost:3006/content (JSON SERVER CALL)
 
 const initialState = {
+  userAuth: null,
   userInfo: null,
   userToken: null,
   allContentData: [],
@@ -74,6 +75,7 @@ export const signUpUser = createAsyncThunk(
   "content/signUpUser",
   async (signUpInfo) => {
     try {
+      console.log(signUpInfo)
       const res = await axios.post("http://localhost:3006/users", signUpInfo, {
         headers: {
           "Content-Type": "application/json",
@@ -206,6 +208,11 @@ const contentSlice = createSlice({
       console.log(payload);
     });
     builder.addCase(updateContent.pending, (state, { payload }) => {});
+    //
+    //
+    // 
+    // (SIGNUP & LOGIN AUTH CALLS)
+    //
     // AUTH USER LOGIN
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       console.log(payload);
@@ -218,7 +225,10 @@ const contentSlice = createSlice({
     });
     // AUTH USER SIGNUP
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
-      console.log(payload);
+      const { accessToken , user} = payload;
+      state.userToken = accessToken
+      state.userInfo = user
+      state.userAuth = true
     });
     builder.addCase(signUpUser.rejected, (state, { payload }) => {
       console.log(payload);

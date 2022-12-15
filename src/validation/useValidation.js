@@ -46,20 +46,20 @@ const useValidation = (callBackSubmit, isSignup) => {
   };
   //
   const validatePassword = (initialPassword) => {
-    if (initialPassword === "") {
+    const password = initialPassword.trim();
+    if (password === "") {
       setPasswordError({
         isPasswordError: true,
         msg: "Can't be empty",
       });
     }
-    if (initialPassword.length >= 1 && initialPassword.length < 4) {
+    if (password.length >= 1 && password.length < 4) {
       setPasswordError({
         isPasswordError: true,
         msg: "Needs to be at least 4 characters",
       });
     }
-    if (initialPassword !== "" && initialPassword.length >= 4) {
-      const password = initialPassword.trim();
+    if (password !== "" && password.length >= 4) {
       setPasswordError({
         isPasswordError: false,
         msg: "",
@@ -71,30 +71,28 @@ const useValidation = (callBackSubmit, isSignup) => {
   };
   //
   const validateRepeatPassword = (initialRepeatPassword, initialPassword) => {
-    if (initialRepeatPassword === "") {
+    const password = initialPassword.trim()
+    const repeatPassword = initialRepeatPassword.trim()
+    if (repeatPassword === "") {
       setRepeatPasswordError({
         isRepeatPasswordError: true,
         msg: "Can't be empty",
       });
     }
-    if (initialPassword !== initialRepeatPassword) {
+    if (password !== repeatPassword) {
       setRepeatPasswordError({
         isRepeatPasswordError: true,
         msg: "passwords need to match",
       });
     }
     if (
-      initialRepeatPassword !== "" &&
-      initialRepeatPassword.length >= 4 &&
-      initialPassword === initialRepeatPassword
+      repeatPassword !== "" &&
+      repeatPassword.length >= 4 &&
+      password === repeatPassword
     ) {
-      const repeatPassword = initialRepeatPassword.trim();
       setRepeatPasswordError({
         isRepeatPasswordError: false,
         msg: "",
-      });
-      setValues((oldValues) => {
-        return { ...oldValues, repeatPassword };
       });
     }
   };
@@ -104,10 +102,13 @@ const useValidation = (callBackSubmit, isSignup) => {
     validateEmail(email);
     validatePassword(password);
   };
-  const checkSignUpInputs = ({ email, password, repeatedPassword }) => {
+  const checkSignUpInputs = ({ email, password, repeatedPassword, bookmarks }) => {
     validateEmail(email);
     validatePassword(password);
     validateRepeatPassword(repeatedPassword, password);
+    setValues(oldValues => {
+      return {...oldValues, bookmarks}
+    })
   };
   //
   //

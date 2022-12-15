@@ -8,11 +8,10 @@ import { useState } from "react";
 
 function App() {
   const [user, setUser] = useState(null);
-  const { userInfo } = useSelector((store) => store.content);
   //
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoute user={user} />}>
+      <Route path="/" element={<ProtectedRoute />}>
         <Route path="/" element={<Dashboard />}>
           <Route index element={<Home />} />
           <Route path="movies" element={<Movies />} />
@@ -20,7 +19,7 @@ function App() {
           <Route path="bookmarked" element={<Bookmarked />} />
         </Route>
       </Route>
-      <Route path="login" element={<LogInSignUp setUser={setUser}/>} />
+      <Route path="login" element={<LogInSignUp/>} />
     </Routes>
   );
 }

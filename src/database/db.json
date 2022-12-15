@@ -1,5 +1,12 @@
 {
-  "users": [],
+  "users": [
+    {
+      "email": "hello@email.com",
+      "password": "$2a$10$qiiQTOxq49i8cywhz9Fiw..lvyomOjC7BfrVDD6qVyMsOKNY6hjTq",
+      "bookmarks": [],
+      "id": 1
+    }
+  ],
   "content": [
     {
       "id": 1,

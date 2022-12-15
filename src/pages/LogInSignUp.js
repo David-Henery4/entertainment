@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import useValidation from "../validation/useValidation";
 import { LogoIcon } from "../assets";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signUpUser, loginUser } from "../features/content/contentSlice";
 
-const LogInSignUp = ({ setUser }) => {
+const LogInSignUp = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
+  const { userAuth } = useSelector((store) => store.content);
   const [isSignUp, setIsSignUp] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
@@ -24,11 +25,16 @@ const LogInSignUp = ({ setUser }) => {
     console.log(status, values);
     if (status === "LOGIN"){}
     if (status === "SIGNUP"){
-      // dispatch(signUpUser())
+      dispatch(signUpUser(values))
     }
-    setUser(true);
-    navigate("/");
   };
+  //
+  useEffect(() => {
+    if (userAuth){
+      navigate("/");
+    }
+  },[userAuth])
+  //
   const { validation, emailError, passwordError, repeatPasswordError } =
     useValidation(handleSubmitCallback, isSignUp);
   //
@@ -45,6 +51,7 @@ const LogInSignUp = ({ setUser }) => {
         email: "",
         password: "",
         repeatedPassword: "",
+        bookmarks: []
       });
     }
   };
@@ -66,6 +73,7 @@ const LogInSignUp = ({ setUser }) => {
           id="login-signup-form"
           onSubmit={(e) => {
             e.preventDefault();
+            console.log(signUpData)
             isSignUp ? validation(signUpData) : validation(loginData);
           }}
         >
