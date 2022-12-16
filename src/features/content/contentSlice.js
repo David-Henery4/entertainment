@@ -90,26 +90,26 @@ export const getTvWithUpdatedBookmarks = createAsyncThunk(
 //*******************ORIGINAL**FETCHES******************//
 
 //
-export const updateContent = createAsyncThunk(
-  "content/updateContent",
-  async (id, { getState }) => {
-    try {
-      const { allContentData } = getState().content;
-      // console.log(allContentData)
-      // console.log(id)
-      // const newData = allContentData.map(item => item.id === id ? {...item, isBookmarked: !item.isBookmarked} : item)
-      const newItem = allContentData.filter((item) => item.id === id);
-      const newcontent = await axios.patch(
-        `http://localhost:3006/content/${id}`,
-        { isBookmarked: newItem[0].isBookmarked }
-      );
-      return newcontent.data;
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  }
-);
+// export const updateContent = createAsyncThunk(
+//   "content/updateContent",
+//   async (id, { getState }) => {
+//     try {
+//       const { allContentData } = getState().content;
+//       // console.log(allContentData)
+//       // console.log(id)
+//       // const newData = allContentData.map(item => item.id === id ? {...item, isBookmarked: !item.isBookmarked} : item)
+//       const newItem = allContentData.filter((item) => item.id === id);
+//       const newcontent = await axios.patch(
+//         `http://localhost:3006/content/${id}`,
+//         { isBookmarked: newItem[0].isBookmarked }
+//       );
+//       return newcontent.data;
+//     } catch (error) {
+//       console.log(error);
+//       return error;
+//     }
+//   }
+// );
 
 //////*******************************************//////
 // SIGN UP & LOGIN AUTH
@@ -240,19 +240,6 @@ const contentSlice = createSlice({
   //
   // EXTRA REDUCERS / API THUNK REDUCERS
   extraReducers: (builder) => {
-    // UPDATE CONTENT
-    builder.addCase(updateContent.fulfilled, (state, { payload }) => {
-      console.log(payload);
-      // const newData = state.allContentData.find(item => item.id === payload.id)
-      // newData.isBookmarked = payload.isBookmarked
-    });
-    builder.addCase(updateContent.rejected, (state, { payload }) => {
-      console.log(payload);
-    });
-    builder.addCase(updateContent.pending, (state, { payload }) => {});
-    //
-    //
-    //
     // (SIGNUP & LOGIN AUTH CALLS)
     //
     // AUTH USER LOGIN
@@ -261,12 +248,15 @@ const contentSlice = createSlice({
       state.userToken = accessToken;
       state.userInfo = user;
       state.userAuth = true;
+      state.isLoading = false
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       console.log(payload);
+      state.isLoading = false;
     });
     builder.addCase(loginUser.pending, (state, { payload }) => {
       console.log(payload);
+      state.isLoading = true;
     });
     // AUTH USER SIGNUP
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
@@ -274,12 +264,15 @@ const contentSlice = createSlice({
       state.userToken = accessToken;
       state.userInfo = user;
       state.userAuth = true;
+      state.isLoading = false;
     });
     builder.addCase(signUpUser.rejected, (state, { payload }) => {
       console.log(payload);
+      state.isLoading = false;
     });
     builder.addCase(signUpUser.pending, (state, { payload }) => {
       console.log(payload);
+      state.isLoading = true;
     });
     // TESTING PUT BOOKMARKS TO USER
     builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {

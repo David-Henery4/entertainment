@@ -43,7 +43,7 @@ const ContentItem = ({
             dispatch(updateMovies(id));
             dispatch(updateTvSeries(id));
             dispatch(updateTrending(id));
-            dispatch(updateContent(id));
+            // dispatch(updateContent(id));
             // TESTING
             dispatch(getUserBookmarks(id))
           }}
