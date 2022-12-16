@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Navbar, SearchInput } from "../components";
-import { getContent, initialFetch } from "../features/content/contentSlice";
+import { getContent, getContentWithUpdatedBookmarks } from "../features/content/contentSlice";
 import { useEffect } from "react";
 import { LogInSignUp, testingGround } from "../pages";
 
@@ -14,13 +14,12 @@ const Dashboard = () => {
   const anyBookmarks = bookmarkedContent.length;
   //
   useEffect(() => {
-    dispatch(getContent());
-    dispatch(initialFetch(userInfo))
+    // dispatch(getContent());
+    dispatch(getContentWithUpdatedBookmarks(userInfo))
   }, []);
   //
   return (
     <div className="App font-outfit font-light bg-darkBlue text-white">
-      <testingGround/>
       {/* <LogInSignUp/> */}
       <main
         className="relative content-start items-baseline pb-14 smTab:pt-6 w-full min-h-screen grid grid-cols-mobBleed gap-y-6 smTab:grid-cols-tabBleed smTab:gap-y-8 lg:grid-cols-deskBleed xl:grid-cols-lrgDeskBleed xl:grid-rows-lrgDeskRows"

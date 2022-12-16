@@ -21,45 +21,38 @@ const initialState = {
   isSuccess: false,
 };
 
-export const initialFetch = createAsyncThunk("content/initialFetch", async (userInfo, {dispatch}) => {
-  try {
-    // const res = await axios.get(
-    //   `http://localhost:3006/users?id=${userInfo.id}`
-    // );
-    // console.log(res.data[0].bookmarks);
-    // const res = await axios.get("http://localhost:3006/content");
-    // console.log(res.data)
-    const promises = []
-    const allContentPromise = axios.get("http://localhost:3006/content");
-    const userBookmarksPromise = axios.get(
-      `http://localhost:3006/users?id=${userInfo.id}`
-    );
-    promises.push(allContentPromise)
-    promises.push(userBookmarksPromise)
-    const res = await Promise.all(promises)
-    const data = res.map(res => res.data)
-    console.log(data)
-    dispatch(settingInitialUserBookmarks(data))
-    return data
-  } catch (error) {
-    console.log(error)
-    return error
+export const getContentWithUpdatedBookmarks = createAsyncThunk(
+  "content/getContentWithUpdatedBookmarks",
+  async (userInfo, { dispatch }) => {
+    try {
+      const promises = [];
+      const allContentPromise = axios.get("http://localhost:3006/content");
+      const userBookmarksPromise = axios.get(
+        `http://localhost:3006/users?id=${userInfo.id}`
+      );
+      promises.push(allContentPromise);
+      promises.push(userBookmarksPromise);
+      const res = await Promise.all(promises);
+      const data = res.map((res) => res.data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
   }
-})
-
-
+);
 
 //*******************ORIGINAL**FETCHES******************//
-export const getContent = createAsyncThunk("content/getContent", async () => {
-  try {
-    const res = await axios.get("http://localhost:3006/content");
-    // console.log(res.data);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-});
+// export const getContent = createAsyncThunk("content/getContent", async () => {
+//   try {
+//     const res = await axios.get("http://localhost:3006/content");
+//     // console.log(res.data);
+//     return res.data;
+//   } catch (error) {
+//     console.log(error);
+//     return error;
+//   }
+// });
 //
 export const updateContent = createAsyncThunk(
   "content/updateContent",
@@ -102,7 +95,6 @@ export const getTV = createAsyncThunk("content/getTV", async () => {
   }
 });
 
-
 //////*******************************************//////
 // SIGN UP & LOGIN AUTH
 
@@ -110,13 +102,13 @@ export const signUpUser = createAsyncThunk(
   "content/signUpUser",
   async (signUpInfo) => {
     try {
-      console.log(signUpInfo)
+      console.log(signUpInfo);
       const res = await axios.post("http://localhost:3006/users", signUpInfo, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(res.data)
+      console.log(res.data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -129,13 +121,13 @@ export const loginUser = createAsyncThunk(
   "content/loginUser",
   async (loginInfo) => {
     try {
-      console.log(loginInfo)
+      console.log(loginInfo);
       const res = await axios.post("http://localhost:3006/login", loginInfo, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(res.data)
+      console.log(res.data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -144,29 +136,34 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getUserBookmarks = createAsyncThunk("content/getUserBookmarks", async (id, {getState}) => {
-  try {
-    const {allContentData, userInfo} = getState().content
-    const choosenBookmarkItems = allContentData.filter(item => item.isBookmarked)
-    const res = await axios.patch(
-      `http://localhost:3006/users/${userInfo.id}`,
-      {
-        bookmarks: choosenBookmarkItems
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+export const getUserBookmarks = createAsyncThunk(
+  "content/getUserBookmarks",
+  async (id, { getState }) => {
+    try {
+      const { allContentData, userInfo } = getState().content;
+      const choosenBookmarkItems = allContentData.filter(
+        (item) => item.isBookmarked
+      );
+      const res = await axios.patch(
+        `http://localhost:3006/users/${userInfo.id}`,
+        {
+          bookmarks: choosenBookmarkItems,
         },
-      }
-    );
-    console.log(res)
-    return res.data
-  } catch (error) {
-    return error
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      return error;
+    }
   }
-})
+);
 
-//******************CREATED**SLICE***************************************// 
+//******************CREATED**SLICE***************************************//
 const contentSlice = createSlice({
   name: "content",
   initialState,
@@ -222,41 +219,25 @@ const contentSlice = createSlice({
       state.searchQueryAndLocation = payload;
       state.searchQuery = query;
     },
-    // TESTING USER BOOKMARKS AND CONTENT
-    settingInitialUserBookmarks: (state, {payload}) => {
-      // console.log(payload)
-      const content = payload[0]
-      const bookmarks = payload[1]
-      const userBookmarks = bookmarks[0].bookmarks
-      const checkingForBookmarks = content.map((item) => {
-        userBookmarks.forEach((bookmarkedItem) => {
-          if (item.id === bookmarkedItem.id){
-            item.isBookmarked = true
-          }
-        })
-        return item
-      })
-      console.log(checkingForBookmarks)
-    }
   },
 
   //
   // EXTRA REDUCERS / API THUNK REDUCERS
   extraReducers: (builder) => {
     // GET ALL DATA
-    builder.addCase(getContent.fulfilled, (state, { payload }) => {
-      state.allContentData = payload;
-      const trendingData = payload.filter((item) => item.isTrending);
-      state.trendingContent = trendingData;
-      state.isLoading = false;
-    });
-    builder.addCase(getContent.rejected, (state, { payload }) => {
-      console.log(payload);
-      state.isLoading = false;
-    });
-    builder.addCase(getContent.pending, (state, { payload }) => {
-      state.isLoading = true;
-    });
+    // builder.addCase(getContent.fulfilled, (state, { payload }) => {
+    //   state.allContentData = payload;
+    //   const trendingData = payload.filter((item) => item.isTrending);
+    //   state.trendingContent = trendingData;
+    //   state.isLoading = false;
+    // });
+    // builder.addCase(getContent.rejected, (state, { payload }) => {
+    //   console.log(payload);
+    //   state.isLoading = false;
+    // });
+    // builder.addCase(getContent.pending, (state, { payload }) => {
+    //   state.isLoading = true;
+    // });
     // GET MOVIE DATA
     builder.addCase(getMovies.fulfilled, (state, { payload }) => {
       state.isLoading = false;
@@ -333,19 +314,41 @@ const contentSlice = createSlice({
       console.log(payload);
     });
     // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
-    builder.addCase(initialFetch.fulfilled, (state, { payload }) => {
-      console.log(payload);
-      const content = payload[0]
-      const user = payload[1]
-      state.userAllContent = content
-      state.userBookmarks = user[0].bookmarks
-    });
-    builder.addCase(initialFetch.pending, (state, { payload }) => {
-      console.log(payload);
-    });
-    builder.addCase(initialFetch.rejected, (state, { payload }) => {
-      console.log(payload);
-    });
+    builder.addCase(
+      getContentWithUpdatedBookmarks.fulfilled,
+      (state, { payload }) => {
+        const content = payload[0];
+        const bookmarks = payload[1];
+        const userBookmarks = bookmarks[0].bookmarks;
+        const checkingForBookmarks = content.map((item) => {
+          userBookmarks.forEach((bookmarkedItem) => {
+            if (item.id === bookmarkedItem.id) {
+              item.isBookmarked = true;
+            }
+          });
+          return item;
+        });
+        state.allContentData = checkingForBookmarks;
+        const trendingData = checkingForBookmarks.filter(
+          (item) => item.isTrending
+        );
+        state.trendingContent = trendingData;
+        state.isLoading = false;
+      }
+    );
+    builder.addCase(
+      getContentWithUpdatedBookmarks.pending,
+      (state, { payload }) => {
+        state.isLoading = true;
+      }
+    );
+    builder.addCase(
+      getContentWithUpdatedBookmarks.rejected,
+      (state, { payload }) => {
+        console.log(payload);
+        state.isLoading = false
+      }
+    );
   },
 });
 
@@ -357,7 +360,7 @@ export const {
   updateTvSeries,
   renderCurrentBookmarks,
   searchQuery,
-  settingInitialUserBookmarks
+  settingInitialUserBookmarks,
 } = contentSlice.actions;
 
 export default contentSlice.reducer;
