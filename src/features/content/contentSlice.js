@@ -3,6 +3,9 @@ import axios from "axios";
 //  http://localhost:3006/content (JSON SERVER CALL)
 
 const initialState = {
+  userBookmarks: [],
+  userAllContent: [],
+  //
   userAuth: null,
   userInfo: null,
   userToken: null,
@@ -18,7 +21,7 @@ const initialState = {
   isSuccess: false,
 };
 
-export const initialFetch = createAsyncThunk("content/initialFetch", async (userInfo) => {
+export const initialFetch = createAsyncThunk("content/initialFetch", async (userInfo, {dispatch}) => {
   try {
     // const res = await axios.get(
     //   `http://localhost:3006/users?id=${userInfo.id}`
@@ -36,6 +39,7 @@ export const initialFetch = createAsyncThunk("content/initialFetch", async (user
     const res = await Promise.all(promises)
     const data = res.map(res => res.data)
     console.log(data)
+    dispatch(settingInitialUserBookmarks(data))
     return data
   } catch (error) {
     console.log(error)
@@ -218,7 +222,26 @@ const contentSlice = createSlice({
       state.searchQueryAndLocation = payload;
       state.searchQuery = query;
     },
+    // TESTING USER BOOKMARKS AND CONTENT
+    settingInitialUserBookmarks: (state, {payload}) => {
+      // console.log(payload)
+      const content = payload[0]
+      const bookmarks = payload[1]
+      const userBookmarks = bookmarks[0].bookmarks
+      const checkingForBookmarks = content.map((item) => {
+        userBookmarks.forEach((bookmarkedItem) => {
+          if (item.id === bookmarkedItem.id){
+            item.isBookmarked = true
+          }
+        })
+        return item
+      })
+      console.log(checkingForBookmarks)
+    }
   },
+
+  //
+  // EXTRA REDUCERS / API THUNK REDUCERS
   extraReducers: (builder) => {
     // GET ALL DATA
     builder.addCase(getContent.fulfilled, (state, { payload }) => {
@@ -270,15 +293,15 @@ const contentSlice = createSlice({
     builder.addCase(updateContent.pending, (state, { payload }) => {});
     //
     //
-    // 
+    //
     // (SIGNUP & LOGIN AUTH CALLS)
     //
     // AUTH USER LOGIN
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       const { accessToken, user } = payload;
-      state.userToken = accessToken
-      state.userInfo = user
-      state.userAuth = true
+      state.userToken = accessToken;
+      state.userInfo = user;
+      state.userAuth = true;
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       console.log(payload);
@@ -288,10 +311,10 @@ const contentSlice = createSlice({
     });
     // AUTH USER SIGNUP
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
-      const { accessToken , user} = payload;
-      state.userToken = accessToken
-      state.userInfo = user
-      state.userAuth = true
+      const { accessToken, user } = payload;
+      state.userToken = accessToken;
+      state.userInfo = user;
+      state.userAuth = true;
     });
     builder.addCase(signUpUser.rejected, (state, { payload }) => {
       console.log(payload);
@@ -300,25 +323,29 @@ const contentSlice = createSlice({
       console.log(payload);
     });
     // TESTING PUT BOOKMARKS TO USER
-    builder.addCase(getUserBookmarks.fulfilled, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(getUserBookmarks.pending, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(getUserBookmarks.rejected, (state, {payload}) => {
-      console.log(payload)
-    })
+    builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(getUserBookmarks.pending, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(getUserBookmarks.rejected, (state, { payload }) => {
+      console.log(payload);
+    });
     // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
-    builder.addCase(initialFetch.fulfilled, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(initialFetch.pending, (state, {payload}) => {
-      console.log(payload)
-    })
-    builder.addCase(initialFetch.rejected, (state, {payload}) => {
-      console.log(payload)
-    })
+    builder.addCase(initialFetch.fulfilled, (state, { payload }) => {
+      console.log(payload);
+      const content = payload[0]
+      const user = payload[1]
+      state.userAllContent = content
+      state.userBookmarks = user[0].bookmarks
+    });
+    builder.addCase(initialFetch.pending, (state, { payload }) => {
+      console.log(payload);
+    });
+    builder.addCase(initialFetch.rejected, (state, { payload }) => {
+      console.log(payload);
+    });
   },
 });
 
@@ -330,6 +357,7 @@ export const {
   updateTvSeries,
   renderCurrentBookmarks,
   searchQuery,
+  settingInitialUserBookmarks
 } = contentSlice.actions;
 
 export default contentSlice.reducer;

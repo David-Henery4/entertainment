@@ -5,6 +5,7 @@ import TvSeries from "./TvSeries";
 import Movies from "./Movies";
 import Bookmarked from "./Bookmarked";
 import LogInSignUp from "./LogInSignUp";
+import testingGround from "./testingGround";
 
 export {
   Dashboard,
@@ -14,4 +15,5 @@ export {
   Bookmarked,
   LogInSignUp,
   ProtectedRoute,
+  testingGround
 }
