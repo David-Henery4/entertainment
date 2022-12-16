@@ -110,17 +110,6 @@ export const updateContent = createAsyncThunk(
     }
   }
 );
-//
-// export const getTV = createAsyncThunk("content/getTV", async () => {
-//   try {
-//     const res = await axios.get(
-//       "http://localhost:3006/content?category=TV+Series"
-//     );
-//     return res.data;
-//   } catch (error) {
-//     return error;
-//   }
-// });
 
 //////*******************************************//////
 // SIGN UP & LOGIN AUTH
