@@ -1,13 +1,13 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Navbar, SearchInput } from "../components";
-import { getContent } from "../features/content/contentSlice";
+import { getContent, initialFetch } from "../features/content/contentSlice";
 import { useEffect } from "react";
 import { LogInSignUp } from "../pages/LogInSignUp";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { bookmarkedContent, isLoading } = useSelector(
+  const { bookmarkedContent, isLoading, userInfo } = useSelector(
     (store) => store.content
   );
   const location = useLocation();
@@ -15,6 +15,7 @@ const Dashboard = () => {
   //
   useEffect(() => {
     dispatch(getContent());
+    dispatch(initialFetch(userInfo))
   }, []);
   //
   return (

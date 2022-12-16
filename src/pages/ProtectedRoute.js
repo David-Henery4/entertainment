@@ -4,8 +4,8 @@ import { Navigate, Outlet, } from 'react-router-dom'
 // Outlet
 
 const ProtectedRoute = ({children ,user}) => {
-  const { userAuth } = useSelector((store) => store.content);
-  if (!userAuth) return <Navigate to="login"  />;
+  const { userInfo } = useSelector((store) => store.content);
+  if (!userInfo) return <Navigate to="login"  />;
   return <Outlet/>  
 }
 

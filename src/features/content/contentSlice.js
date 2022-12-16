@@ -18,7 +18,30 @@ const initialState = {
   isSuccess: false,
 };
 
-
+export const initialFetch = createAsyncThunk("content/initialFetch", async (userInfo) => {
+  try {
+    // const res = await axios.get(
+    //   `http://localhost:3006/users?id=${userInfo.id}`
+    // );
+    // console.log(res.data[0].bookmarks);
+    // const res = await axios.get("http://localhost:3006/content");
+    // console.log(res.data)
+    const promises = []
+    const allContentPromise = axios.get("http://localhost:3006/content");
+    const userBookmarksPromise = axios.get(
+      `http://localhost:3006/users?id=${userInfo.id}`
+    );
+    promises.push(allContentPromise)
+    promises.push(userBookmarksPromise)
+    const res = await Promise.all(promises)
+    const data = res.map(res => res.data)
+    console.log(data)
+    return data
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+})
 
 
 
@@ -284,6 +307,16 @@ const contentSlice = createSlice({
       console.log(payload)
     })
     builder.addCase(getUserBookmarks.rejected, (state, {payload}) => {
+      console.log(payload)
+    })
+    // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
+    builder.addCase(initialFetch.fulfilled, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(initialFetch.pending, (state, {payload}) => {
+      console.log(payload)
+    })
+    builder.addCase(initialFetch.rejected, (state, {payload}) => {
       console.log(payload)
     })
   },

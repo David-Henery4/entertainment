@@ -8,7 +8,7 @@ import { signUpUser, loginUser } from "../features/content/contentSlice";
 const LogInSignUp = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const { userAuth } = useSelector((store) => store.content);
+  const { userInfo } = useSelector((store) => store.content);
   const [isSignUp, setIsSignUp] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
@@ -33,10 +33,10 @@ const LogInSignUp = () => {
   };
   //
   useEffect(() => {
-    if (userAuth){
+    if (userInfo){
       navigate("/");
     }
-  },[userAuth])
+  },[userInfo])
   //
   const { validation, emailError, passwordError, repeatPasswordError } =
     useValidation(handleSubmitCallback, isSignUp);
