@@ -87,29 +87,20 @@ export const getTvWithUpdatedBookmarks = createAsyncThunk(
   }
 );
 
-//*******************ORIGINAL**FETCHES******************//
-
-//
-// export const updateContent = createAsyncThunk(
-//   "content/updateContent",
-//   async (id, { getState }) => {
-//     try {
-//       const { allContentData } = getState().content;
-//       // console.log(allContentData)
-//       // console.log(id)
-//       // const newData = allContentData.map(item => item.id === id ? {...item, isBookmarked: !item.isBookmarked} : item)
-//       const newItem = allContentData.filter((item) => item.id === id);
-//       const newcontent = await axios.patch(
-//         `http://localhost:3006/content/${id}`,
-//         { isBookmarked: newItem[0].isBookmarked }
-//       );
-//       return newcontent.data;
-//     } catch (error) {
-//       console.log(error);
-//       return error;
-//     }
-//   }
-// );
+export const getUserBookmarks = createAsyncThunk(
+  "content/getUserBookmarks",
+  async (_, { getState }) => {
+    try {
+      const { userInfo } = getState().content;
+      const res = await axios.get(
+        `http://localhost:3006/users?id=${userInfo.id}`
+      );
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
 
 //////*******************************************//////
 // SIGN UP & LOGIN AUTH
@@ -152,8 +143,8 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const getUserBookmarks = createAsyncThunk(
-  "content/getUserBookmarks",
+export const updateUserBookmarks = createAsyncThunk(
+  "content/updateUserBookmarks",
   async (id, { getState }) => {
     try {
       const { allContentData, userInfo } = getState().content;
@@ -248,7 +239,7 @@ const contentSlice = createSlice({
       state.userToken = accessToken;
       state.userInfo = user;
       state.userAuth = true;
-      state.isLoading = false
+      state.isLoading = false;
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
       console.log(payload);
@@ -275,13 +266,13 @@ const contentSlice = createSlice({
       state.isLoading = true;
     });
     // TESTING PUT BOOKMARKS TO USER
-    builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {
+    builder.addCase(updateUserBookmarks.fulfilled, (state, { payload }) => {
       console.log(payload);
     });
-    builder.addCase(getUserBookmarks.pending, (state, { payload }) => {
+    builder.addCase(updateUserBookmarks.pending, (state, { payload }) => {
       console.log(payload);
     });
-    builder.addCase(getUserBookmarks.rejected, (state, { payload }) => {
+    builder.addCase(updateUserBookmarks.rejected, (state, { payload }) => {
       console.log(payload);
     });
     // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
@@ -314,9 +305,20 @@ const contentSlice = createSlice({
     builder.addCase(
       getMoviesWithUpdatedBookmarks.fulfilled,
       (state, { payload }) => {
-        const checkingForBookmarks = checkingBookmarks(payload);
-        state.moviesData = checkingForBookmarks;
-        state.isLoading = false;
+        const content = payload[0];
+        const bookmarks = payload[1];
+        const userBookmarks = bookmarks[0].bookmarks;
+        const checkingForBookmarks = content.map((item) => {
+          userBookmarks.forEach((bookmarkedItem) => {
+            if (item.id === bookmarkedItem.id) {
+              item.isBookmarked = true;
+            }
+          });
+          return item;
+        });
+        console.log(checkingForBookmarks)
+        state.moviesData = checkingForBookmarks
+        state.isLoading = false
       }
     );
     builder.addCase(
@@ -332,19 +334,38 @@ const contentSlice = createSlice({
         state.isLoading = false;
       }
     );
-    // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
-    builder.addCase(getTvWithUpdatedBookmarks.fulfilled, (state, {payload}) => {
-      const checkingForBookmarks = checkingBookmarks(payload)
-      state.tvSeriesData = checkingForBookmarks
-      state.isLoading = false
-    })
-    builder.addCase(getTvWithUpdatedBookmarks.pending, (state, {payload}) => {
-      state.isLoading = true
-    })
-    builder.addCase(getTvWithUpdatedBookmarks.rejected, (state, {payload}) => {
-      console.log(payload)
-      state.isLoading = false
-    })
+    // TESING INITIAL FETCH TO GET ALL TV SERIES & USER BOOKMARKS
+    builder.addCase(
+      getTvWithUpdatedBookmarks.fulfilled,
+      (state, { payload }) => {
+        const checkingForBookmarks = checkingBookmarks(payload);
+        state.tvSeriesData = checkingForBookmarks;
+        state.isLoading = false;
+      }
+    );
+    builder.addCase(getTvWithUpdatedBookmarks.pending, (state, { payload }) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      getTvWithUpdatedBookmarks.rejected,
+      (state, { payload }) => {
+        console.log(payload);
+        state.isLoading = false;
+      }
+    );
+    // TESING INITIAL FETCH TO GET ALL USER BOOKMARKS
+    builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {
+      console.log(payload);
+      state.bookmarkedContent = payload[0].bookmarks;
+      state.isLoading = false;
+    });
+    builder.addCase(getUserBookmarks.pending, (state, { payload }) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getUserBookmarks.rejected, (state, { payload }) => {
+      console.log(payload);
+      state.isLoading = false;
+    });
   },
 });
 

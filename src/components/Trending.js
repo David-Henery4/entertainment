@@ -6,6 +6,7 @@ import {
   updateContent,
   updateMovies,
   updateTvSeries,
+  updateUserBookmarks
 } from "../features/content/contentSlice";
 import {
   BookmarkIconEmpty,
@@ -44,6 +45,7 @@ const Trending = ({ trendingData }) => {
                   dispatch(updateTvSeries(id));
                   dispatch(updateTrending(id));
                   // dispatch(updateContent(id));
+                  dispatch(updateUserBookmarks(id))
                 }}
               >
                 {isBookmarked ? (

@@ -11,6 +11,7 @@ const checkingBookmarks = (data) => {
     });
     return item;
   });
+  console.log(checkingForBookmarks)
   return checkingForBookmarks
 }
 
