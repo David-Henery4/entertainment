@@ -64,6 +64,28 @@ export const getMoviesWithUpdatedBookmarks = createAsyncThunk(
     }
   }
 );
+export const getTvWithUpdatedBookmarks = createAsyncThunk(
+  "content/getTvWithUpdatedBookmarks",
+  async (userInfo) => {
+    try {
+      const promises = [];
+      const allContentPromise = axios.get(
+        "http://localhost:3006/content?category=TV+Series"
+      );
+      const userBookmarksPromise = axios.get(
+        `http://localhost:3006/users?id=${userInfo.id}`
+      );
+      promises.push(allContentPromise);
+      promises.push(userBookmarksPromise);
+      const res = await Promise.all(promises);
+      const data = res.map((res) => res.data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+);
 
 //*******************ORIGINAL**FETCHES******************//
 
@@ -89,25 +111,16 @@ export const updateContent = createAsyncThunk(
   }
 );
 //
-// export const getMovies = createAsyncThunk("content/getMovies", async () => {
+// export const getTV = createAsyncThunk("content/getTV", async () => {
 //   try {
-//     const res = await axios.get("http://localhost:3006/content?category=Movie");
+//     const res = await axios.get(
+//       "http://localhost:3006/content?category=TV+Series"
+//     );
 //     return res.data;
 //   } catch (error) {
 //     return error;
 //   }
 // });
-//
-export const getTV = createAsyncThunk("content/getTV", async () => {
-  try {
-    const res = await axios.get(
-      "http://localhost:3006/content?category=TV+Series"
-    );
-    return res.data;
-  } catch (error) {
-    return error;
-  }
-});
 
 //////*******************************************//////
 // SIGN UP & LOGIN AUTH
@@ -238,44 +251,6 @@ const contentSlice = createSlice({
   //
   // EXTRA REDUCERS / API THUNK REDUCERS
   extraReducers: (builder) => {
-    // GET ALL DATA
-    // builder.addCase(getContent.fulfilled, (state, { payload }) => {
-    //   state.allContentData = payload;
-    //   const trendingData = payload.filter((item) => item.isTrending);
-    //   state.trendingContent = trendingData;
-    //   state.isLoading = false;
-    // });
-    // builder.addCase(getContent.rejected, (state, { payload }) => {
-    //   console.log(payload);
-    //   state.isLoading = false;
-    // });
-    // builder.addCase(getContent.pending, (state, { payload }) => {
-    //   state.isLoading = true;
-    // });
-    // // GET MOVIE DATA
-    // builder.addCase(getMovies.fulfilled, (state, { payload }) => {
-    //   state.isLoading = false;
-    //   state.moviesData = payload;
-    // });
-    // builder.addCase(getMovies.pending, (state, { payload }) => {
-    //   state.isLoading = true;
-    // });
-    // builder.addCase(getMovies.rejected, (state, { payload }) => {
-    //   state.isLoading = false;
-    //   console.log(payload);
-    // });
-    // GET TV DATA
-    builder.addCase(getTV.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
-      state.tvSeriesData = payload;
-    });
-    builder.addCase(getTV.pending, (state, { payload }) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getTV.rejected, (state, { payload }) => {
-      state.isLoading = false;
-      console.log(payload);
-    });
     // UPDATE CONTENT
     builder.addCase(updateContent.fulfilled, (state, { payload }) => {
       console.log(payload);
@@ -331,7 +306,7 @@ const contentSlice = createSlice({
     builder.addCase(
       getContentWithUpdatedBookmarks.fulfilled,
       (state, { payload }) => {
-        const checkingForBookmarks = checkingBookmarks(payload) 
+        const checkingForBookmarks = checkingBookmarks(payload);
         state.allContentData = checkingForBookmarks;
         const trendingData = checkingForBookmarks.filter(
           (item) => item.isTrending
@@ -353,17 +328,38 @@ const contentSlice = createSlice({
         state.isLoading = false;
       }
     );
-  // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
-    builder.addCase(getMoviesWithUpdatedBookmarks.fulfilled, (state, {payload}) => {
-      console.log(payload)
+    // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
+    builder.addCase(
+      getMoviesWithUpdatedBookmarks.fulfilled,
+      (state, { payload }) => {
+        const checkingForBookmarks = checkingBookmarks(payload);
+        state.moviesData = checkingForBookmarks;
+        state.isLoading = false;
+      }
+    );
+    builder.addCase(
+      getMoviesWithUpdatedBookmarks.pending,
+      (state, { payload }) => {
+        state.isLoading = true;
+      }
+    );
+    builder.addCase(
+      getMoviesWithUpdatedBookmarks.rejected,
+      (state, { payload }) => {
+        console.log(payload);
+        state.isLoading = false;
+      }
+    );
+    // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
+    builder.addCase(getTvWithUpdatedBookmarks.fulfilled, (state, {payload}) => {
       const checkingForBookmarks = checkingBookmarks(payload)
-      state.moviesData = checkingForBookmarks
+      state.tvSeriesData = checkingForBookmarks
       state.isLoading = false
     })
-    builder.addCase(getMoviesWithUpdatedBookmarks.pending, (state, {payload}) => {
+    builder.addCase(getTvWithUpdatedBookmarks.pending, (state, {payload}) => {
       state.isLoading = true
     })
-    builder.addCase(getMoviesWithUpdatedBookmarks.rejected, (state, {payload}) => {
+    builder.addCase(getTvWithUpdatedBookmarks.rejected, (state, {payload}) => {
       console.log(payload)
       state.isLoading = false
     })
