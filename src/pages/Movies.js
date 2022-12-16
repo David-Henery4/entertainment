@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getMovies } from "../features/content/contentSlice";
+import { getMovies, getMoviesWithUpdatedBookmarks } from "../features/content/contentSlice";
 import { Content, LoadingSpinner } from "../components";
 import handleSearch from "../search/searchFunction";
 
@@ -8,7 +8,7 @@ import handleSearch from "../search/searchFunction";
 const Movies = () => {
   const [searchQueryArray, setSearchQueryArray] = useState([]);
   const [queryLength, setQueryLength] = useState(0);
-  const { moviesData, isLoading, searchQueryAndLocation, searchQuery } =
+  const { moviesData, isLoading, searchQueryAndLocation, searchQuery, userInfo } =
     useSelector((store) => store.content);
   const dispatch = useDispatch();
   //
@@ -19,7 +19,8 @@ const Movies = () => {
   }, [searchQuery, moviesData]);
   //
   useEffect(() => {
-    dispatch(getMovies());
+    // dispatch(getMovies());
+    dispatch(getMoviesWithUpdatedBookmarks(userInfo))
   }, []);
   //
   return (

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import checkingBookmarks from "../../checkingForUserBookmarks/checkingBookmarks";
 //  http://localhost:3006/content (JSON SERVER CALL)
 
 const initialState = {
@@ -23,7 +24,7 @@ const initialState = {
 
 export const getContentWithUpdatedBookmarks = createAsyncThunk(
   "content/getContentWithUpdatedBookmarks",
-  async (userInfo, { dispatch }) => {
+  async (userInfo) => {
     try {
       const promises = [];
       const allContentPromise = axios.get("http://localhost:3006/content");
@@ -41,18 +42,31 @@ export const getContentWithUpdatedBookmarks = createAsyncThunk(
     }
   }
 );
+export const getMoviesWithUpdatedBookmarks = createAsyncThunk(
+  "content/getMoviesWithUpdatedBookmarks",
+  async (userInfo) => {
+    try {
+      const promises = [];
+      const allContentPromise = axios.get(
+        "http://localhost:3006/content?category=Movie"
+      );
+      const userBookmarksPromise = axios.get(
+        `http://localhost:3006/users?id=${userInfo.id}`
+      );
+      promises.push(allContentPromise);
+      promises.push(userBookmarksPromise);
+      const res = await Promise.all(promises);
+      const data = res.map((res) => res.data);
+      return data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+);
 
 //*******************ORIGINAL**FETCHES******************//
-// export const getContent = createAsyncThunk("content/getContent", async () => {
-//   try {
-//     const res = await axios.get("http://localhost:3006/content");
-//     // console.log(res.data);
-//     return res.data;
-//   } catch (error) {
-//     console.log(error);
-//     return error;
-//   }
-// });
+
 //
 export const updateContent = createAsyncThunk(
   "content/updateContent",
@@ -75,14 +89,14 @@ export const updateContent = createAsyncThunk(
   }
 );
 //
-export const getMovies = createAsyncThunk("content/getMovies", async () => {
-  try {
-    const res = await axios.get("http://localhost:3006/content?category=Movie");
-    return res.data;
-  } catch (error) {
-    return error;
-  }
-});
+// export const getMovies = createAsyncThunk("content/getMovies", async () => {
+//   try {
+//     const res = await axios.get("http://localhost:3006/content?category=Movie");
+//     return res.data;
+//   } catch (error) {
+//     return error;
+//   }
+// });
 //
 export const getTV = createAsyncThunk("content/getTV", async () => {
   try {
@@ -238,18 +252,18 @@ const contentSlice = createSlice({
     // builder.addCase(getContent.pending, (state, { payload }) => {
     //   state.isLoading = true;
     // });
-    // GET MOVIE DATA
-    builder.addCase(getMovies.fulfilled, (state, { payload }) => {
-      state.isLoading = false;
-      state.moviesData = payload;
-    });
-    builder.addCase(getMovies.pending, (state, { payload }) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getMovies.rejected, (state, { payload }) => {
-      state.isLoading = false;
-      console.log(payload);
-    });
+    // // GET MOVIE DATA
+    // builder.addCase(getMovies.fulfilled, (state, { payload }) => {
+    //   state.isLoading = false;
+    //   state.moviesData = payload;
+    // });
+    // builder.addCase(getMovies.pending, (state, { payload }) => {
+    //   state.isLoading = true;
+    // });
+    // builder.addCase(getMovies.rejected, (state, { payload }) => {
+    //   state.isLoading = false;
+    //   console.log(payload);
+    // });
     // GET TV DATA
     builder.addCase(getTV.fulfilled, (state, { payload }) => {
       state.isLoading = false;
@@ -317,17 +331,7 @@ const contentSlice = createSlice({
     builder.addCase(
       getContentWithUpdatedBookmarks.fulfilled,
       (state, { payload }) => {
-        const content = payload[0];
-        const bookmarks = payload[1];
-        const userBookmarks = bookmarks[0].bookmarks;
-        const checkingForBookmarks = content.map((item) => {
-          userBookmarks.forEach((bookmarkedItem) => {
-            if (item.id === bookmarkedItem.id) {
-              item.isBookmarked = true;
-            }
-          });
-          return item;
-        });
+        const checkingForBookmarks = checkingBookmarks(payload) 
         state.allContentData = checkingForBookmarks;
         const trendingData = checkingForBookmarks.filter(
           (item) => item.isTrending
@@ -346,9 +350,23 @@ const contentSlice = createSlice({
       getContentWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
         console.log(payload);
-        state.isLoading = false
+        state.isLoading = false;
       }
     );
+  // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
+    builder.addCase(getMoviesWithUpdatedBookmarks.fulfilled, (state, {payload}) => {
+      console.log(payload)
+      const checkingForBookmarks = checkingBookmarks(payload)
+      state.moviesData = checkingForBookmarks
+      state.isLoading = false
+    })
+    builder.addCase(getMoviesWithUpdatedBookmarks.pending, (state, {payload}) => {
+      state.isLoading = true
+    })
+    builder.addCase(getMoviesWithUpdatedBookmarks.rejected, (state, {payload}) => {
+      console.log(payload)
+      state.isLoading = false
+    })
   },
 });
 
