@@ -4,6 +4,7 @@ import Trending from "./Trending";
 import Content from "./Content";
 import ContentItem from "./ContentItem";
 import LoadingSpinner from "./LoadingSpinner";
+import Signout from "./Signout";
 
 export {
   Navbar,
@@ -11,5 +12,6 @@ export {
   Trending,
   Content,
   ContentItem,
-  LoadingSpinner
+  LoadingSpinner,
+  Signout,
 }

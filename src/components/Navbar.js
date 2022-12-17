@@ -2,8 +2,18 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import navigationData from '../navigation/navData'
 import { LogoIcon, profileImg } from '../assets'
+import {Signout} from "../components"
+import { useState } from 'react'
 
 const Navbar = () => {
+  const [signoutActive,setIsSignoutActive] = useState(false)
+  //
+  const signoutActiveStyles = () => {
+    return signoutActive
+      ? "absolute transition-all rounded bg-greyishBlue p-2 hover:cursor-pointer top-10 -left-16 scale-1 xl:-left-4"
+      : "absolute transition-all rounded  bg-greyishBlue p-2 hover:cursor-pointer  top-0 -left-6 scale-0";
+  }
+  //
   const navLinksStyles = (isActive) => {
     return isActive
       ? "fill-white hover:fill-red"
@@ -27,8 +37,9 @@ const Navbar = () => {
         })}
         </ul>
       </div>
-      <div className='w-6 smTab:w-8'>
+      <div className='w-6 smTab:w-8 relative hover:cursor-pointer' onClick={() => setIsSignoutActive(!signoutActive) }>
         <img src={profileImg} alt="profile-avatar" />
+        <Signout signoutActiveStyles={signoutActiveStyles}/>
       </div>
     </nav>
   )

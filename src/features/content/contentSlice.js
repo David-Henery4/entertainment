@@ -7,7 +7,6 @@ const initialState = {
   userBookmarks: [],
   userAllContent: [],
   //
-  userAuth: null,
   userInfo: null,
   userToken: null,
   allContentData: [],
@@ -138,6 +137,8 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+
+
 export const updateUserBookmarks = createAsyncThunk(
   "content/updateUserBookmarks",
   async (id, { getState }) => {
@@ -216,19 +217,21 @@ const contentSlice = createSlice({
       state.searchQueryAndLocation = payload;
       state.searchQuery = query;
     },
+    signoutUser: (state, {payload}) => {
+      state.userInfo = null
+      state.userToken = null
+    }
   },
 
   //
   // EXTRA REDUCERS / API THUNK REDUCERS
   extraReducers: (builder) => {
-    // (SIGNUP & LOGIN AUTH CALLS)
     //
     // AUTH USER LOGIN
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       const { accessToken, user } = payload;
       state.userToken = accessToken;
       state.userInfo = user;
-      state.userAuth = true;
       state.isLoading = false;
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
@@ -243,7 +246,6 @@ const contentSlice = createSlice({
       const { accessToken, user } = payload;
       state.userToken = accessToken;
       state.userInfo = user;
-      state.userAuth = true;
       state.isLoading = false;
     });
     builder.addCase(signUpUser.rejected, (state, { payload }) => {
@@ -293,6 +295,7 @@ const contentSlice = createSlice({
     builder.addCase(
       getMoviesWithUpdatedBookmarks.fulfilled,
       (state, { payload }) => {
+        // REFACTOR TO FUNCTION
         const content = payload[0];
         const bookmarks = payload[1];
         const userBookmarks = bookmarks[0].bookmarks;
@@ -364,6 +367,7 @@ export const {
   renderCurrentBookmarks,
   searchQuery,
   settingInitialUserBookmarks,
+  signoutUser,
 } = contentSlice.actions;
 
 export default contentSlice.reducer;
