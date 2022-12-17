@@ -22,9 +22,7 @@ const LogInSignUp = () => {
   });
   //
   const handleSubmitCallback = (status, values) => {
-    console.log(status, values);
     if (status === "LOGIN"){
-      console.log(values)
       dispatch(loginUser(values))
     }
     if (status === "SIGNUP"){
@@ -76,7 +74,6 @@ const LogInSignUp = () => {
           id="login-signup-form"
           onSubmit={(e) => {
             e.preventDefault();
-            console.log(signUpData)
             isSignUp ? validation(signUpData) : validation(loginData);
           }}
         >

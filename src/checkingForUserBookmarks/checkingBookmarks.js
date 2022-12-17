@@ -1,4 +1,3 @@
-
 const checkingBookmarks = (data) => {
   const content = data[0];
   const bookmarks = data[1];
@@ -11,8 +10,7 @@ const checkingBookmarks = (data) => {
     });
     return item;
   });
-  console.log(checkingForBookmarks)
-  return checkingForBookmarks
-}
+  return checkingForBookmarks;
+};
 
-export default checkingBookmarks
+export default checkingBookmarks;

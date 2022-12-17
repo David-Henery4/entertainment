@@ -109,16 +109,13 @@ export const signUpUser = createAsyncThunk(
   "content/signUpUser",
   async (signUpInfo) => {
     try {
-      console.log(signUpInfo);
       const res = await axios.post("http://localhost:3006/users", signUpInfo, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(res.data);
       return res.data;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -128,13 +125,11 @@ export const loginUser = createAsyncThunk(
   "content/loginUser",
   async (loginInfo) => {
     try {
-      console.log(loginInfo);
       const res = await axios.post("http://localhost:3006/login", loginInfo, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log(res.data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -162,7 +157,6 @@ export const updateUserBookmarks = createAsyncThunk(
           },
         }
       );
-      console.log(res);
       return res.data;
     } catch (error) {
       return error;
@@ -176,7 +170,6 @@ const contentSlice = createSlice({
   initialState,
   reducers: {
     bookmarkContent: (state, { payload }) => {
-      console.log(payload);
       const markedItem = state.allContentData.find(
         (item) => item.id === payload
       );
@@ -192,7 +185,6 @@ const contentSlice = createSlice({
       }
     },
     updateTrending: (state, { payload }) => {
-      console.log(payload);
       const markedItem = state.trendingContent.find(
         (item) => item.id === payload
       );
@@ -202,14 +194,12 @@ const contentSlice = createSlice({
       // state.trendingContent = [state.trendingContent, markedItem]
     },
     updateTvSeries: (state, { payload }) => {
-      console.log(payload);
       const markedItem = state.tvSeriesData.find((item) => item.id === payload);
       if (markedItem) {
         markedItem.isBookmarked = !markedItem.isBookmarked;
       }
     },
     updateMovies: (state, { payload }) => {
-      console.log(payload);
       const markedItem = state.moviesData.find((item) => item.id === payload);
       if (markedItem) {
         markedItem.isBookmarked = !markedItem.isBookmarked;
@@ -246,7 +236,6 @@ const contentSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(loginUser.pending, (state, { payload }) => {
-      console.log(payload);
       state.isLoading = true;
     });
     // AUTH USER SIGNUP
@@ -262,15 +251,14 @@ const contentSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(signUpUser.pending, (state, { payload }) => {
-      console.log(payload);
       state.isLoading = true;
     });
-    // TESTING PUT BOOKMARKS TO USER
+    // TESTING PUT BOOKMARKS TO USER (MIGHT REMOVE)
     builder.addCase(updateUserBookmarks.fulfilled, (state, { payload }) => {
-      console.log(payload);
+      // console.log(payload);
     });
     builder.addCase(updateUserBookmarks.pending, (state, { payload }) => {
-      console.log(payload);
+      // console.log(payload);
     });
     builder.addCase(updateUserBookmarks.rejected, (state, { payload }) => {
       console.log(payload);
@@ -316,9 +304,8 @@ const contentSlice = createSlice({
           });
           return item;
         });
-        console.log(checkingForBookmarks)
-        state.moviesData = checkingForBookmarks
-        state.isLoading = false
+        state.moviesData = checkingForBookmarks;
+        state.isLoading = false;
       }
     );
     builder.addCase(
@@ -355,7 +342,6 @@ const contentSlice = createSlice({
     );
     // TESING INITIAL FETCH TO GET ALL USER BOOKMARKS
     builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {
-      console.log(payload);
       state.bookmarkedContent = payload[0].bookmarks;
       state.isLoading = false;
     });
