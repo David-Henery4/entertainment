@@ -17,7 +17,7 @@ const initialState = {
   searchQueryAndLocation: {},
   searchQuery: "",
   isLoading: false,
-  isError: null,
+  isError: false,
   isSuccess: false,
 };
 
@@ -36,7 +36,6 @@ export const getContentWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -58,7 +57,6 @@ export const getMoviesWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -80,7 +78,6 @@ export const getTvWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -131,7 +128,6 @@ export const loginUser = createAsyncThunk(
       });
       return res.data;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -220,6 +216,9 @@ const contentSlice = createSlice({
     signoutUser: (state, {payload}) => {
       state.userInfo = null
       state.userToken = null
+    },
+    resetIsError: (state, {payload}) => {
+      state.isError = false
     }
   },
 
@@ -255,15 +254,10 @@ const contentSlice = createSlice({
     builder.addCase(signUpUser.pending, (state, { payload }) => {
       state.isLoading = true;
     });
-    // TESTING PUT BOOKMARKS TO USER (MIGHT REMOVE)
-    builder.addCase(updateUserBookmarks.fulfilled, (state, { payload }) => {
-      // console.log(payload);
-    });
-    builder.addCase(updateUserBookmarks.pending, (state, { payload }) => {
-      // console.log(payload);
-    });
+    // UPDATE USER BOOKMARKS
     builder.addCase(updateUserBookmarks.rejected, (state, { payload }) => {
-      console.log(payload);
+      console.error(payload);
+      state.isError = true
     });
     // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
     builder.addCase(
@@ -287,8 +281,9 @@ const contentSlice = createSlice({
     builder.addCase(
       getContentWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
-        console.log(payload);
+        console.error(payload);
         state.isLoading = false;
+        state.isError = true;
       }
     );
     // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
@@ -320,7 +315,8 @@ const contentSlice = createSlice({
     builder.addCase(
       getMoviesWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
-        console.log(payload);
+        console.error(payload);
+        state.isError = true
         state.isLoading = false;
       }
     );
@@ -339,21 +335,18 @@ const contentSlice = createSlice({
     builder.addCase(
       getTvWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
-        console.log(payload);
+        console.error(payload);
+        state.isError = true
         state.isLoading = false;
       }
     );
     // TESING INITIAL FETCH TO GET ALL USER BOOKMARKS
     builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {
       state.bookmarkedContent = payload[0].bookmarks;
-      state.isLoading = false;
-    });
-    builder.addCase(getUserBookmarks.pending, (state, { payload }) => {
-      state.isLoading = true;
     });
     builder.addCase(getUserBookmarks.rejected, (state, { payload }) => {
-      console.log(payload);
-      state.isLoading = false;
+      console.error(payload);
+      state.isError = true
     });
   },
 });
@@ -368,6 +361,7 @@ export const {
   searchQuery,
   settingInitialUserBookmarks,
   signoutUser,
+  resetIsError,
 } = contentSlice.actions;
 
 export default contentSlice.reducer;
