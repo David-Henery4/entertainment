@@ -23,7 +23,7 @@ const initialState = {
 
 export const getContentWithUpdatedBookmarks = createAsyncThunk(
   "content/getContentWithUpdatedBookmarks",
-  async (userInfo) => {
+  async (userInfo, {rejectWithValue}) => {
     try {
       const promises = [];
       const allContentPromise = axios.get("http://localhost:3006/content");
@@ -36,7 +36,8 @@ export const getContentWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      return error;
+      console.error("error")
+      throw error
     }
   }
 );
@@ -57,7 +58,8 @@ export const getMoviesWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      return error;
+      console.error("error");
+      throw error;
     }
   }
 );
@@ -78,7 +80,8 @@ export const getTvWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      return error;
+      console.error("error");
+      throw error;
     }
   }
 );
@@ -93,7 +96,8 @@ export const getUserBookmarks = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      return error;
+      console.error("error");
+      throw error;
     }
   }
 );
@@ -128,6 +132,7 @@ export const loginUser = createAsyncThunk(
       });
       return res.data;
     } catch (error) {
+      console.log(error)
       return error;
     }
   }
@@ -281,7 +286,6 @@ const contentSlice = createSlice({
     builder.addCase(
       getContentWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
-        console.error(payload);
         state.isLoading = false;
         state.isError = true;
       }

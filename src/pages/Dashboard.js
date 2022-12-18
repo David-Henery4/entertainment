@@ -15,7 +15,6 @@ const Dashboard = () => {
   );
   const location = useLocation();
   const anyBookmarks = bookmarkedContent.length;
-  console.log(isError)
   //
   useEffect(() => {
     // dispatch(getContent());
