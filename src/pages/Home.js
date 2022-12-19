@@ -5,6 +5,7 @@ import { Trending, Content, LoadingSpinner } from "../components";
 import { useState } from "react";
 import handleSearch from "../search/searchFunction";
 
+
 const Home = () => {
   const [searchQueryArray, setSearchQueryArray] = useState([]);
   const [queryLength, setQueryLength] = useState(0);
