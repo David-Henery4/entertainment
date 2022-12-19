@@ -18,12 +18,14 @@ const initialState = {
   searchQuery: "",
   isLoading: false,
   isError: false,
+  isLoginError: false,
+  isSignupError: false,
   isSuccess: false,
 };
 
 export const getContentWithUpdatedBookmarks = createAsyncThunk(
   "content/getContentWithUpdatedBookmarks",
-  async (userInfo, {rejectWithValue}) => {
+  async (userInfo, { rejectWithValue }) => {
     try {
       const promises = [];
       const allContentPromise = axios.get("http://localhost:3006/content");
@@ -36,8 +38,8 @@ export const getContentWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      console.error("error")
-      throw error
+      console.error(error.response.data);
+      throw error;
     }
   }
 );
@@ -58,7 +60,7 @@ export const getMoviesWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      console.error("error");
+      console.error(error.response.data);
       throw error;
     }
   }
@@ -80,7 +82,7 @@ export const getTvWithUpdatedBookmarks = createAsyncThunk(
       const data = res.map((res) => res.data);
       return data;
     } catch (error) {
-      console.error("error");
+      console.error(error.response.data);
       throw error;
     }
   }
@@ -96,7 +98,7 @@ export const getUserBookmarks = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      console.error("error");
+      console.error(error.response.data);
       throw error;
     }
   }
@@ -116,7 +118,8 @@ export const signUpUser = createAsyncThunk(
       });
       return res.data;
     } catch (error) {
-      return error;
+      console.error(error.response.data);
+      throw error;
     }
   }
 );
@@ -132,13 +135,11 @@ export const loginUser = createAsyncThunk(
       });
       return res.data;
     } catch (error) {
-      console.log(error)
-      return error;
+      console.error(error.response.data);
+      throw error;
     }
   }
 );
-
-
 
 export const updateUserBookmarks = createAsyncThunk(
   "content/updateUserBookmarks",
@@ -161,7 +162,8 @@ export const updateUserBookmarks = createAsyncThunk(
       );
       return res.data;
     } catch (error) {
-      return error;
+      console.error(error)
+      throw error
     }
   }
 );
@@ -218,13 +220,13 @@ const contentSlice = createSlice({
       state.searchQueryAndLocation = payload;
       state.searchQuery = query;
     },
-    signoutUser: (state, {payload}) => {
-      state.userInfo = null
-      state.userToken = null
+    signoutUser: (state, { payload }) => {
+      state.userInfo = null;
+      state.userToken = null;
     },
-    resetIsError: (state, {payload}) => {
-      state.isError = false
-    }
+    resetIsError: (state, { payload }) => {
+      state.isError = false;
+    },
   },
 
   //
@@ -237,13 +239,18 @@ const contentSlice = createSlice({
       state.userToken = accessToken;
       state.userInfo = user;
       state.isLoading = false;
+      state.isLoginError = false;
+      state.isSignupError = false;
     });
     builder.addCase(loginUser.rejected, (state, { payload }) => {
-      console.log(payload);
       state.isLoading = false;
+      state.isLoginError = true;
+      state.isSignupError = false;
     });
     builder.addCase(loginUser.pending, (state, { payload }) => {
       state.isLoading = true;
+      state.isLoginError = false;
+      state.isSignupError = false;
     });
     // AUTH USER SIGNUP
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
@@ -251,18 +258,22 @@ const contentSlice = createSlice({
       state.userToken = accessToken;
       state.userInfo = user;
       state.isLoading = false;
+      state.isSignupError = false;
+      state.isLoginError = false;
     });
     builder.addCase(signUpUser.rejected, (state, { payload }) => {
-      console.log(payload);
       state.isLoading = false;
+      state.isSignupError = true;
+      state.isLoginError = false;
     });
     builder.addCase(signUpUser.pending, (state, { payload }) => {
       state.isLoading = true;
+      state.isSignupError = false;
+      state.isLoginError = false;
     });
     // UPDATE USER BOOKMARKS
     builder.addCase(updateUserBookmarks.rejected, (state, { payload }) => {
-      console.error(payload);
-      state.isError = true
+      state.isError = true;
     });
     // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
     builder.addCase(
@@ -275,12 +286,14 @@ const contentSlice = createSlice({
         );
         state.trendingContent = trendingData;
         state.isLoading = false;
+        state.isError = false
       }
     );
     builder.addCase(
       getContentWithUpdatedBookmarks.pending,
       (state, { payload }) => {
         state.isLoading = true;
+        state.isError = false
       }
     );
     builder.addCase(
@@ -294,33 +307,23 @@ const contentSlice = createSlice({
     builder.addCase(
       getMoviesWithUpdatedBookmarks.fulfilled,
       (state, { payload }) => {
-        // REFACTOR TO FUNCTION
-        const content = payload[0];
-        const bookmarks = payload[1];
-        const userBookmarks = bookmarks[0].bookmarks;
-        const checkingForBookmarks = content.map((item) => {
-          userBookmarks.forEach((bookmarkedItem) => {
-            if (item.id === bookmarkedItem.id) {
-              item.isBookmarked = true;
-            }
-          });
-          return item;
-        });
+        const checkingForBookmarks = checkingBookmarks(payload);
         state.moviesData = checkingForBookmarks;
         state.isLoading = false;
+        state.isError = false
       }
     );
     builder.addCase(
       getMoviesWithUpdatedBookmarks.pending,
       (state, { payload }) => {
         state.isLoading = true;
+        state.isError = false
       }
     );
     builder.addCase(
       getMoviesWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
-        console.error(payload);
-        state.isError = true
+        state.isError = true;
         state.isLoading = false;
       }
     );
@@ -331,16 +334,17 @@ const contentSlice = createSlice({
         const checkingForBookmarks = checkingBookmarks(payload);
         state.tvSeriesData = checkingForBookmarks;
         state.isLoading = false;
+        state.isError = false
       }
     );
     builder.addCase(getTvWithUpdatedBookmarks.pending, (state, { payload }) => {
       state.isLoading = true;
+      state.isError = false;
     });
     builder.addCase(
       getTvWithUpdatedBookmarks.rejected,
       (state, { payload }) => {
-        console.error(payload);
-        state.isError = true
+        state.isError = true;
         state.isLoading = false;
       }
     );
@@ -349,8 +353,7 @@ const contentSlice = createSlice({
       state.bookmarkedContent = payload[0].bookmarks;
     });
     builder.addCase(getUserBookmarks.rejected, (state, { payload }) => {
-      console.error(payload);
-      state.isError = true
+      state.isError = true;
     });
   },
 });

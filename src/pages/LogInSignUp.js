@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUpUser, loginUser } from "../features/content/contentSlice";
 
 const LogInSignUp = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userInfo } = useSelector((store) => store.content);
+  const { userInfo, isLoginError, isSignupError } = useSelector(
+    (store) => store.content
+  );
   const [isSignUp, setIsSignUp] = useState(false);
   const [loginData, setLoginData] = useState({
     email: "",
@@ -22,19 +24,19 @@ const LogInSignUp = () => {
   });
   //
   const handleSubmitCallback = (status, values) => {
-    if (status === "LOGIN"){
-      dispatch(loginUser(values))
+    if (status === "LOGIN") {
+      dispatch(loginUser(values));
     }
-    if (status === "SIGNUP"){
-      dispatch(signUpUser(values))
+    if (status === "SIGNUP") {
+      dispatch(signUpUser(values));
     }
   };
   //
   useEffect(() => {
-    if (userInfo){
+    if (userInfo) {
       navigate("/");
     }
-  },[userInfo])
+  }, [userInfo]);
   //
   const { validation, emailError, passwordError, repeatPasswordError } =
     useValidation(handleSubmitCallback, isSignUp);
@@ -52,7 +54,7 @@ const LogInSignUp = () => {
         email: "",
         password: "",
         repeatedPassword: "",
-        bookmarks: []
+        bookmarks: [],
       });
     }
   };
@@ -62,9 +64,9 @@ const LogInSignUp = () => {
   }, [isSignUp]);
   //
   return (
-    <div className="fixed top-0 left-0 h-full w-full bg-darkBlue z-20 flex flex-col items-center justify-center font-outfit font-light text-white">
+    <div className="relative h-screen w-full bg-darkBlue z-20 flex flex-col items-center justify-center font-outfit font-light text-white">
       <LogoIcon className="relative bottom-[60px]" />
-      <div className="max-w-[400px] bg-semiDarkBlue p-6 w-11/12 rounded-[10px] grid gap-10">
+      <div className="relative max-w-[400px] bg-semiDarkBlue p-6 w-11/12 rounded-[10px] grid gap-10">
         <h2 className="text-[32px] font-light text-left">
           {isSignUp ? "Sign Up" : "Login"}
         </h2>
@@ -168,12 +170,25 @@ const LogInSignUp = () => {
             <p>
               {isSignUp ? "Already have an account?" : "Don't have an account?"}
             </p>
-            <button className="text-red" onClick={() => setIsSignUp(!isSignUp)}>
+            <button className="text-red" onClick={() => {
+              setIsSignUp(!isSignUp)
+              }}>
               {isSignUp ? "Login" : "Sign Up"}
             </button>
           </div>
         </div>
       </div>
+      {isLoginError && (
+        <p className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[90%] text-center text-red">
+          Must be valid a login, please try again
+        </p>
+      )}
+      {/* isSignupError */}
+      {isSignupError && (
+        <p className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[90%] text-center text-red">
+          Something went wrong during signup, please try again
+        </p>
+      )}
     </div>
   );
 };
