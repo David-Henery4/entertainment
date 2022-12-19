@@ -183,7 +183,6 @@ const LogInSignUp = () => {
           Must be valid a login, please try again
         </p>
       )}
-      {/* isSignupError */}
       {isSignupError && (
         <p className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[90%] text-center text-red">
           Something went wrong during signup, please try again

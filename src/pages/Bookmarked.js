@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { renderCurrentBookmarks, getUserBookmarks } from "../features/content/contentSlice";
+import { getUserBookmarks } from "../features/content/contentSlice";
 import { Content, LoadingSpinner } from "../components";
 import handleSearch from "../search/searchFunction";
 
@@ -37,7 +37,6 @@ const Bookmarked = () => {
   }, [searchQuery, bookmarkedContent]);
   //
   useEffect(() => {
-    // dispatch(renderCurrentBookmarks());
     dispatch(getUserBookmarks(userInfo))
   }, [allContentData]);
   //

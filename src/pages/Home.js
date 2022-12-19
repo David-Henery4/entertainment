@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getContent, getContentWithUpdatedBookmarks } from "../features/content/contentSlice";
+import { getContentWithUpdatedBookmarks } from "../features/content/contentSlice";
 import { Trending, Content, LoadingSpinner } from "../components";
 import { useState } from "react";
 import handleSearch from "../search/searchFunction";
@@ -25,7 +25,6 @@ const Home = () => {
   }, [searchQuery, allContentData]);
   //
   useEffect(() => {
-    // dispatch(getContent());
     dispatch(getContentWithUpdatedBookmarks(userInfo));
   }, []);
   //

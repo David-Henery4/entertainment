@@ -27,9 +27,3 @@ let store = configureStore({
 let persistor = persistStore(store);
 
 export { store, persistor };
-
-// export const store = configureStore({
-//   reducer: {
-//     content: contentReducer,
-//   },
-// })

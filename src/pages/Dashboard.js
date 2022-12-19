@@ -2,7 +2,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Navbar, SearchInput } from "../components";
 import {
-  getContent,
   getContentWithUpdatedBookmarks,
 } from "../features/content/contentSlice";
 import { useEffect } from "react";
@@ -10,14 +9,13 @@ import { ErrorModal } from "../pages";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { bookmarkedContent, isLoading, userInfo, isError } = useSelector(
+  const { bookmarkedContent, userInfo, isError } = useSelector(
     (store) => store.content
   );
   const location = useLocation();
   const anyBookmarks = bookmarkedContent.length;
   //
   useEffect(() => {
-    // dispatch(getContent());
     dispatch(getContentWithUpdatedBookmarks(userInfo));
   }, []);
   //

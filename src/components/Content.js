@@ -6,7 +6,6 @@ import { ContentItem } from "../components";
 const Content = ({name, contentData}) => {
   const location = useLocation()
   const pageName = location.pathname
-  // console.log(contentData)
   const noDataPageConditionMsg = () => {
   if (pageName === "/bookmarked"){
     return "You have no bookmarked items."

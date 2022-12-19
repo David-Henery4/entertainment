@@ -1,13 +1,18 @@
 import "./styles/index.scss";
-import { Dashboard, LogInSignUp, ProtectedRoute } from "./pages";
-//
+import {
+  Dashboard,
+  LogInSignUp,
+  ProtectedRoute,
+  Home,
+  Bookmarked,
+  Movies,
+  TvSeries,
+} from "./pages";
 import { Route, Routes } from "react-router-dom";
-import { Home, Bookmarked, Movies, TvSeries } from "./pages";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+
+
 
 function App() {
-  const [user, setUser] = useState(null);
   //
   return (
     <Routes>

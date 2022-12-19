@@ -1,12 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import checkingBookmarks from "../../checkingForUserBookmarks/checkingBookmarks";
-//  http://localhost:3006/content (JSON SERVER CALL)
+import {allContentWithBookmarks, allMoviesWithBookmarks, allTvAndBookmarks, allUserBookmarks, login, signup, updateBookmarks} from "../callbacks";
+
 
 const initialState = {
-  userBookmarks: [],
-  userAllContent: [],
-  //
   userInfo: null,
   userToken: null,
   allContentData: [],
@@ -23,149 +20,41 @@ const initialState = {
   isSuccess: false,
 };
 
+//***API**CALLS****//
+
+// All Content with bookmarks 
 export const getContentWithUpdatedBookmarks = createAsyncThunk(
-  "content/getContentWithUpdatedBookmarks",
-  async (userInfo, { rejectWithValue }) => {
-    try {
-      const promises = [];
-      const allContentPromise = axios.get("http://localhost:3006/content");
-      const userBookmarksPromise = axios.get(
-        `http://localhost:3006/users?id=${userInfo.id}`
-      );
-      promises.push(allContentPromise);
-      promises.push(userBookmarksPromise);
-      const res = await Promise.all(promises);
-      const data = res.map((res) => res.data);
-      return data;
-    } catch (error) {
-      console.error(error.response.data);
-      throw error;
-    }
-  }
+  "content/getContentWithUpdatedBookmarks", allContentWithBookmarks
 );
+
+// All movies with bookmarks
 export const getMoviesWithUpdatedBookmarks = createAsyncThunk(
-  "content/getMoviesWithUpdatedBookmarks",
-  async (userInfo) => {
-    try {
-      const promises = [];
-      const allContentPromise = axios.get(
-        "http://localhost:3006/content?category=Movie"
-      );
-      const userBookmarksPromise = axios.get(
-        `http://localhost:3006/users?id=${userInfo.id}`
-      );
-      promises.push(allContentPromise);
-      promises.push(userBookmarksPromise);
-      const res = await Promise.all(promises);
-      const data = res.map((res) => res.data);
-      return data;
-    } catch (error) {
-      console.error(error.response.data);
-      throw error;
-    }
-  }
+  "content/getMoviesWithUpdatedBookmarks", allMoviesWithBookmarks
 );
+
+// ALL TV with bookmarks
 export const getTvWithUpdatedBookmarks = createAsyncThunk(
-  "content/getTvWithUpdatedBookmarks",
-  async (userInfo) => {
-    try {
-      const promises = [];
-      const allContentPromise = axios.get(
-        "http://localhost:3006/content?category=TV+Series"
-      );
-      const userBookmarksPromise = axios.get(
-        `http://localhost:3006/users?id=${userInfo.id}`
-      );
-      promises.push(allContentPromise);
-      promises.push(userBookmarksPromise);
-      const res = await Promise.all(promises);
-      const data = res.map((res) => res.data);
-      return data;
-    } catch (error) {
-      console.error(error.response.data);
-      throw error;
-    }
-  }
+  "content/getTvWithUpdatedBookmarks", allTvAndBookmarks
 );
 
+// Get users bookmarks
 export const getUserBookmarks = createAsyncThunk(
-  "content/getUserBookmarks",
-  async (_, { getState }) => {
-    try {
-      const { userInfo } = getState().content;
-      const res = await axios.get(
-        `http://localhost:3006/users?id=${userInfo.id}`
-      );
-      return res.data;
-    } catch (error) {
-      console.error(error.response.data);
-      throw error;
-    }
-  }
+  "content/getUserBookmarks", allUserBookmarks
 );
 
-//////*******************************************//////
-// SIGN UP & LOGIN AUTH
-
+// SIGNUP USERS
 export const signUpUser = createAsyncThunk(
-  "content/signUpUser",
-  async (signUpInfo) => {
-    try {
-      const res = await axios.post("http://localhost:3006/users", signUpInfo, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return res.data;
-    } catch (error) {
-      console.error(error.response.data);
-      throw error;
-    }
-  }
-);
-//
-export const loginUser = createAsyncThunk(
-  "content/loginUser",
-  async (loginInfo) => {
-    try {
-      const res = await axios.post("http://localhost:3006/login", loginInfo, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return res.data;
-    } catch (error) {
-      console.error(error.response.data);
-      throw error;
-    }
-  }
+  "content/signUpUser", signup
 );
 
+// LOGIN USERS
+export const loginUser = createAsyncThunk(
+  "content/loginUser", login
+);
+
+// UPDATE USERS BOOKMARK INFO
 export const updateUserBookmarks = createAsyncThunk(
-  "content/updateUserBookmarks",
-  async (id, { getState }) => {
-    try {
-      const { allContentData, userInfo } = getState().content;
-      const choosenBookmarkItems = allContentData.filter(
-        (item) => item.isBookmarked
-      );
-      const res = await axios.patch(
-        `http://localhost:3006/users/${userInfo.id}`,
-        {
-          bookmarks: choosenBookmarkItems,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return res.data;
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
-  }
+  "content/updateUserBookmarks", updateBookmarks
 );
 
 //******************CREATED**SLICE***************************************//
@@ -195,7 +84,6 @@ const contentSlice = createSlice({
       if (markedItem) {
         markedItem.isBookmarked = !markedItem.isBookmarked;
       }
-      // state.trendingContent = [state.trendingContent, markedItem]
     },
     updateTvSeries: (state, { payload }) => {
       const markedItem = state.tvSeriesData.find((item) => item.id === payload);
@@ -228,11 +116,9 @@ const contentSlice = createSlice({
       state.isError = false;
     },
   },
-
-  //
   // EXTRA REDUCERS / API THUNK REDUCERS
   extraReducers: (builder) => {
-    //
+
     // AUTH USER LOGIN
     builder.addCase(loginUser.fulfilled, (state, { payload }) => {
       const { accessToken, user } = payload;
@@ -252,6 +138,7 @@ const contentSlice = createSlice({
       state.isLoginError = false;
       state.isSignupError = false;
     });
+    
     // AUTH USER SIGNUP
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
       const { accessToken, user } = payload;
@@ -271,10 +158,12 @@ const contentSlice = createSlice({
       state.isSignupError = false;
       state.isLoginError = false;
     });
+
     // UPDATE USER BOOKMARKS
     builder.addCase(updateUserBookmarks.rejected, (state, { payload }) => {
       state.isError = true;
     });
+
     // TESING INITIAL FETCH TO GET ALL CONTENT & USER BOOKMARKS
     builder.addCase(
       getContentWithUpdatedBookmarks.fulfilled,
@@ -303,6 +192,7 @@ const contentSlice = createSlice({
         state.isError = true;
       }
     );
+
     // TESING INITIAL FETCH TO GET ALL MOVIES & USER BOOKMARKS
     builder.addCase(
       getMoviesWithUpdatedBookmarks.fulfilled,
@@ -327,6 +217,7 @@ const contentSlice = createSlice({
         state.isLoading = false;
       }
     );
+
     // TESING INITIAL FETCH TO GET ALL TV SERIES & USER BOOKMARKS
     builder.addCase(
       getTvWithUpdatedBookmarks.fulfilled,
@@ -348,6 +239,7 @@ const contentSlice = createSlice({
         state.isLoading = false;
       }
     );
+    
     // TESING INITIAL FETCH TO GET ALL USER BOOKMARKS
     builder.addCase(getUserBookmarks.fulfilled, (state, { payload }) => {
       state.bookmarkedContent = payload[0].bookmarks;

@@ -1,9 +1,8 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import {
   bookmarkContent,
   updateTrending,
-  updateContent,
   updateMovies,
   updateTvSeries,
   updateUserBookmarks,
@@ -43,8 +42,6 @@ const ContentItem = ({
             dispatch(updateMovies(id));
             dispatch(updateTvSeries(id));
             dispatch(updateTrending(id));
-            // dispatch(updateContent(id));
-            // TESTING
             dispatch(updateUserBookmarks(id))
           }}
         >

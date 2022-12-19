@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTV, getTvWithUpdatedBookmarks } from "../features/content/contentSlice";
+import { getTvWithUpdatedBookmarks } from "../features/content/contentSlice";
 import { Content, LoadingSpinner } from "../components";
 import handleSearch from "../search/searchFunction";
 
@@ -19,7 +19,6 @@ const TvSeries = () => {
   },[searchQuery, tvSeriesData])
   //
   useEffect(() => {
-    // dispatch(getTV());
     dispatch(getTvWithUpdatedBookmarks(userInfo))
   }, []);
   return (

@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import {
   bookmarkContent,
   updateTrending,
-  updateContent,
   updateMovies,
   updateTvSeries,
   updateUserBookmarks
@@ -44,7 +43,6 @@ const Trending = ({ trendingData }) => {
                   dispatch(updateMovies(id));
                   dispatch(updateTvSeries(id));
                   dispatch(updateTrending(id));
-                  // dispatch(updateContent(id));
                   dispatch(updateUserBookmarks(id))
                 }}
               >
@@ -68,7 +66,6 @@ const Trending = ({ trendingData }) => {
                     thumbnail.trending &&
                     require(`../assets/thumbnails/${thumbnail.trending.small}`)
                   }
-                  // src={beyondEarthTrending}
                   alt="beyond-earth-trending-thumbnail"
                 />
               </picture>

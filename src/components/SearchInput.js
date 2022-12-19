@@ -1,14 +1,10 @@
 import React from "react";
-import { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { searchQuery } from "../features/content/contentSlice";
 import { searchIcon } from "../assets";
 
 const SearchInput = () => {
-  const { allContentData, moviesData, tvSeriesData, bookmarkedContent } =
-    useSelector((store) => store.content);
-  // const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch()
   const location = useLocation();
   //
@@ -36,7 +32,6 @@ const SearchInput = () => {
         type="text"
         placeholder={placeholderText()}
         onChange={(e) => {
-          // setSearchQuery(e.target.value);
           handleSearchQuery(e.target.value)
         }}
       />

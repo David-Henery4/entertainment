@@ -37,7 +37,7 @@ const Navbar = () => {
         })}
         </ul>
       </div>
-      <div className='w-6 smTab:w-8 relative hover:cursor-pointer' onClick={() => setIsSignoutActive(!signoutActive) }>
+      <div className='w-6 smTab:w-8 relative hover:cursor-pointer hover:scale-110' onClick={() => setIsSignoutActive(!signoutActive) }>
         <img src={profileImg} alt="profile-avatar" />
         <Signout signoutActiveStyles={signoutActiveStyles}/>
       </div>
