@@ -8,10 +8,10 @@ export const allContentWithBookmarks = async (userInfo) => {
   try {
     const promises = [];
     const allContentPromise = axios.get(
-      "https://hill-spot-philodendron.glitch.me/content"
+      "https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/content"
     );
     const userBookmarksPromise = axios.get(
-      `https://hill-spot-philodendron.glitch.me/users?id=${userInfo.id}`
+      `https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/users?id=${userInfo.id}`
     );
     promises.push(allContentPromise);
     promises.push(userBookmarksPromise);
@@ -30,10 +30,10 @@ export const allMoviesWithBookmarks = async (userInfo) => {
   try {
     const promises = [];
     const allContentPromise = axios.get(
-      "https://hill-spot-philodendron.glitch.me/content?category=Movie"
+      "https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/content?category=Movie"
     );
     const userBookmarksPromise = axios.get(
-      `https://hill-spot-philodendron.glitch.me/users?id=${userInfo.id}`
+      `https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/users?id=${userInfo.id}`
     );
     promises.push(allContentPromise);
     promises.push(userBookmarksPromise);
@@ -51,10 +51,10 @@ export const allTvAndBookmarks = async (userInfo) => {
   try {
     const promises = [];
     const allContentPromise = axios.get(
-      "https://hill-spot-philodendron.glitch.me/content?category=TV+Series"
+      "https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/content?category=TV+Series"
     );
     const userBookmarksPromise = axios.get(
-      `https://hill-spot-philodendron.glitch.me/users?id=${userInfo.id}`
+      `https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/users?id=${userInfo.id}`
     );
     promises.push(allContentPromise);
     promises.push(userBookmarksPromise);
@@ -72,7 +72,7 @@ export const allUserBookmarks = async (_, { getState }) => {
   try {
     const { userInfo } = getState().content;
     const res = await axios.get(
-      `https://hill-spot-philodendron.glitch.me/users?id=${userInfo.id}`
+      `https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/users?id=${userInfo.id}`
     );
     return res.data;
   } catch (error) {
@@ -84,7 +84,7 @@ export const allUserBookmarks = async (_, { getState }) => {
 // SIGNUP USER
 export const signup = async (signUpInfo) => {
   try {
-    const res = await axios.post("https://hill-spot-philodendron.glitch.me/users", signUpInfo, {
+    const res = await axios.post("https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/users", signUpInfo, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -99,7 +99,7 @@ export const signup = async (signUpInfo) => {
 // LOGIN USER
 export const login = async (loginInfo) => {
   try {
-    const res = await axios.post("https://hill-spot-philodendron.glitch.me/login", loginInfo, {
+    const res = await axios.post("https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/login", loginInfo, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -119,7 +119,7 @@ export const updateBookmarks = async (id, { getState }) => {
       (item) => item.isBookmarked
     );
     const res = await axios.patch(
-      `https://hill-spot-philodendron.glitch.me/users/${userInfo.id}`,
+      `https://melodious-bombolone-c5ecae.netlify.app/.netlify/functions/api/users/${userInfo.id}`,
       {
         bookmarks: choosenBookmarkItems,
       },
