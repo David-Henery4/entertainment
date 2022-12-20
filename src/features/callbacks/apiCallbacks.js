@@ -3,16 +3,25 @@ import axios from "axios";
 //**************ALL**API**CABACK**FUNCTIONS**********//
 // https://hill-spot-philodendron.glitch.me/
 
-
 // ALL CONTENT (WITH BOOKMARKS)
 export const allContentWithBookmarks = async (userInfo) => {
   try {
     const promises = [];
     const allContentPromise = axios.get(
-      "https://somber-hill-structure.glitch.me/content"
+      "http://localhost:3006/content",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     const userBookmarksPromise = axios.get(
-      `https://somber-hill-structure.glitch.me/users?id=${userInfo.id}`
+      `http://localhost:3006/users?id=${userInfo.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     promises.push(allContentPromise);
     promises.push(userBookmarksPromise);
@@ -25,16 +34,25 @@ export const allContentWithBookmarks = async (userInfo) => {
   }
 };
 
-
 // ALL MOVIES (WITH BOOKMARKS)
 export const allMoviesWithBookmarks = async (userInfo) => {
   try {
     const promises = [];
     const allContentPromise = axios.get(
-      "https://somber-hill-structure.glitch.me/content?category=Movie"
+      "http://localhost:3006/content?category=Movie",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     const userBookmarksPromise = axios.get(
-      `https://somber-hill-structure.glitch.me/users?id=${userInfo.id}`
+      `http://localhost:3006/users?id=${userInfo.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     promises.push(allContentPromise);
     promises.push(userBookmarksPromise);
@@ -52,10 +70,20 @@ export const allTvAndBookmarks = async (userInfo) => {
   try {
     const promises = [];
     const allContentPromise = axios.get(
-      "https://somber-hill-structure.glitch.me/content?category=TV+Series"
+      "http://localhost:3006/content?category=TV+Series",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     const userBookmarksPromise = axios.get(
-      `https://somber-hill-structure.glitch.me/users?id=${userInfo.id}`
+      `http://localhost:3006/users?id=${userInfo.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     promises.push(allContentPromise);
     promises.push(userBookmarksPromise);
@@ -71,9 +99,14 @@ export const allTvAndBookmarks = async (userInfo) => {
 // ALL USER BOOKMARKS
 export const allUserBookmarks = async (_, { getState }) => {
   try {
-    const { userInfo } = getState().content;
+    const { userInfo} = getState().content;
     const res = await axios.get(
-      `https://somber-hill-structure.glitch.me/users?id=${userInfo.id}`
+      `http://localhost:3006/users?id=${userInfo.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
     return res.data;
   } catch (error) {
@@ -85,11 +118,15 @@ export const allUserBookmarks = async (_, { getState }) => {
 // SIGNUP USER
 export const signup = async (signUpInfo) => {
   try {
-    const res = await axios.post("https://somber-hill-structure.glitch.me/users", signUpInfo, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.post(
+      "http://localhost:3006/users",
+      signUpInfo,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return res.data;
   } catch (error) {
     console.error(error.response.data);
@@ -100,11 +137,15 @@ export const signup = async (signUpInfo) => {
 // LOGIN USER
 export const login = async (loginInfo) => {
   try {
-    const res = await axios.post("https://somber-hill-structure.glitch.me/login", loginInfo, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await axios.post(
+      "http://localhost:3006/login",
+      loginInfo,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return res.data;
   } catch (error) {
     console.error(error.response.data);
@@ -115,12 +156,12 @@ export const login = async (loginInfo) => {
 // UPDATE USERS BOOKMARKS ON THE SERVER
 export const updateBookmarks = async (id, { getState }) => {
   try {
-    const { allContentData, userInfo } = getState().content;
+    const { allContentData, userInfo} = getState().content;
     const choosenBookmarkItems = allContentData.filter(
       (item) => item.isBookmarked
     );
     const res = await axios.patch(
-      `https://somber-hill-structure.glitch.me/users/${userInfo.id}`,
+      `http://localhost:3006/users/${userInfo.id}`,
       {
         bookmarks: choosenBookmarkItems,
       },

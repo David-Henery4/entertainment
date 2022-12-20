@@ -5,26 +5,6 @@
       "password": "$2a$10$qiiQTOxq49i8cywhz9Fiw..lvyomOjC7BfrVDD6qVyMsOKNY6hjTq",
       "bookmarks": [
         {
-          "id": 1,
-          "title": "Beyond Earth",
-          "thumbnail": {
-            "trending": {
-              "small": "beyond-earth/trending/small.jpg",
-              "large": "beyond-earth/trending/large.jpg"
-            },
-            "regular": {
-              "small": "beyond-earth/regular/small.jpg",
-              "medium": "beyond-earth/regular/medium.jpg",
-              "large": "beyond-earth/regular/large.jpg"
-            }
-          },
-          "year": 2019,
-          "category": "Movie",
-          "rating": "PG",
-          "isBookmarked": true,
-          "isTrending": true
-        },
-        {
           "id": 4,
           "title": "1998",
           "thumbnail": {
